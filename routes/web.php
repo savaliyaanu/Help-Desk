@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ComplainController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -113,6 +114,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('invoice-items-create/{invoice_id?}', 'InvoiceItemController@index');
     Route::get('change-spare-create/{challan_id?}', 'ChangeSpareController@index');
 
+    Route::get('complain-detail', [ComplainController::class, 'index']);
+    Route::post('search-record', [ComplainController::class, 'index']);
+    Route::get('clear-search', [ComplainController::class, 'clearSearch']);
 
 
     /** End Get Route */
@@ -133,6 +137,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('get-replacement', 'AdvanceReplacementController@getData');
     Route::get('get-delivery-challan', 'DeliveryChallanOutController@getData');
     Route::get('get-transport-detail', 'TransportMasterController@getData');
+    Route::get('get-product-master-detail', 'ProductMasterController@getData');
     Route::get('get-faq', 'SupportController@getData');
     /**Ajax DataTable Route End */
 
@@ -141,7 +146,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('delete-company', 'CompanyMasterController@destroy');
     Route::delete('delete-branch', 'BranchController@destroy');
     Route::delete('delete-user', 'UsersController@destroy');
-    Route::delete('delete-billty', 'BilltyController@destroy');
+    Route::post('delete-billty', 'BilltyController@destroy');
     Route::delete('delete-challan', 'ChallanController@destroy ');
     Route::delete('delete-service-station/{id?}', 'ServiceStationController@destroy');
     Route::delete('delete-invoice/{id?}', 'InvoiceController@destroy');
@@ -181,13 +186,13 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('party', 'PartyController');
     Route::resource('client-master', 'ClientMasterController');
     Route::resource('transport-master', 'TransportMasterController');
+    Route::resource('product-master', 'ProductMasterController');
     Route::resource('challan-image', 'ImageController');
     Route::resource('support-menu', 'SupportController');
     Route::resource('case-solution', 'CaseSolutionController');
     Route::resource('engine-testing', 'EngineTestingController');
     Route::resource('shortage-item', 'ChallanShortageItemController');
     Route::resource('advance-replacement', 'AdvanceReplacementController');
-    Route::resource('advance-replacement-in', 'AdvanceReplacementInController');
     Route::resource('advance-replacement-in', 'AdvanceReplacementInController');
     Route::resource('replacement-product', 'ReplacementProductInController');
     Route::resource('inspection-report', 'InspectionReportController');

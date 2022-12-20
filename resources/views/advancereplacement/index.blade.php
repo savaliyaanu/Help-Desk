@@ -81,24 +81,7 @@
                 @endif
                 <div class="card card-custom">
                     <div class="card-body">
-                        <div class="mb-7">
-                            <div class="row align-items-center">
-                                <div class="col-lg-9 col-xl-8">
-                                    <div class="row align-items-center">
-                                        <div class="col-md-4 my-2 my-md-0">
-                                            <div class="input-icon">
-                                                <input type="text" class="form-control" placeholder="Search..."
-                                                       id="kt_datatable_search_query"/>
-                                                <span>
-																	<i class="flaticon2-search-1 text-muted"></i>
-																</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <table class="datatable datatable-bordered datatable-head-custom" id="kt_datatable">
+                        <table id="example" class="display" style="width:100%">
                             <thead>
                             <tr>
                                 <th>Complain No</th>
@@ -106,7 +89,10 @@
                                 <th>Date</th>
                                 <th>Client Name</th>
                                 <th>Status</th>
-                                <th>Actions</th>
+                                <th>Inward Report</th>
+                                <th>Product Inward</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -121,7 +107,8 @@
                                     @endif
                                     <td align="center">{{ $items->company_name.'/'.$items->order_id }}</td>
                                     <td align="center">{{ date('d-m-Y',strtotime($items->created_at)) }}</td>
-                                    <td>{{$items->client_name}}</td>
+                                    <td>{{$items->client_name}}
+                                    </td>
                                     <td>
                                         @if($items->status == 'pending')
                                             <span style="width: 137px;">
@@ -141,17 +128,23 @@
                                            href="{{url('advance-replacement-pdf/'.$items->replacement_out_id)}}">
                                             <i class="far fa-file-pdf"></i>
                                         </a>
+                                    </td>
+                                        <td>
                                         <a class="btn btn-sm btn-clean btn-icon btn-icon-md"
                                            title="Replacement Product Inward"
                                            href="{{url('replacement-in/'.$items->replacement_out_id)}}">
                                             <i class="flaticon-doc"></i>
                                         </a>
+                                        </td>
+                                        <td>
                                         <?php if (Gate::allows('advance-replacement-policy', 1)) { ?>
                                         <a class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit"
                                            href="{{ url('advance-replacement/'.$items->replacement_out_id.'/edit') }}">
                                             <i class="flaticon2-pen"></i>
                                         </a>
                                         <?php } ?>
+                                        </td>
+                                        <td>
                                         <?php if (Gate::allows('advance-replacement-policy', 1)) { ?>
                                         <form method="POST" style="display:inline;" title="Delete"
                                               action="{{ route('advance-replacement.destroy',$items->replacement_out_id)  }}">
@@ -173,6 +166,77 @@
         </div>
     </div>
 @endsection
+@push('styles')
+    <link href="{{asset('assets/css/fixedHeader.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{asset('assets/css/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
+@endpush
 @push('scripts')
-    <script src="{{asset('metronic/assets/js/pages/crud/ktdatatable/base/html-table.js?v=7.0.4')}}"></script>
+    <script src="{{asset('assets/js/jquery-3.5.1.js')}}"></script>
+    <script src="{{asset('assets/js/jquery.dataTables.min.js')}}"></script>
+    <script src="{{asset('assets/js/dataTables.fixedHeader.min.js')}}"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Setup - add a text input to each footer cell
+            $('#example thead tr')
+                .clone(true)
+                .addClass('filters')
+                .appendTo('#example thead');
+
+            var table = $('#example').DataTable({
+                orderCellsTop: false,
+                fixedHeader: true,
+                ordering: false,
+                initComplete: function () {
+                    var api = this.api();
+
+                    // For each column
+                    api
+                        .columns()
+                        .eq(0)
+                        .each(function (colIdx) {
+                            // Set the header cell to contain the input element
+                            var cell = $('.filters th').eq(
+                                $(api.column(colIdx).header()).index()
+                            );
+                            var title = $(cell).text();
+                            $(cell).html('<input type="text" placeholder="' + title + '" />');
+
+                            // On every keypress in this input
+                            $(
+                                'input',
+                                $('.filters th').eq($(api.column(colIdx).header()).index())
+                            )
+                                .off('keyup change')
+                                .on('change', function (e) {
+                                    // Get the search value
+                                    $(this).attr('title', $(this).val());
+                                    var regexr = '({search})'; //$(this).parents('th').find('select').val();
+
+                                    var cursorPosition = this.selectionStart;
+                                    // Search the column for that value
+                                    api
+                                        .column(colIdx)
+                                        .search(
+                                            this.value != ''
+                                                ? regexr.replace('{search}', '(((' + this.value + ')))')
+                                                : '',
+                                            this.value != '',
+                                            this.value == ''
+                                        )
+                                        .draw();
+                                })
+                                .on('keyup', function (e) {
+                                    e.stopPropagation();
+
+                                    $(this).trigger('change');
+                                    $(this)
+                                        .focus()[0]
+                                        .setSelectionRange(cursorPosition, cursorPosition);
+                                });
+                        });
+                },
+            });
+        });
+    </script>
 @endpush

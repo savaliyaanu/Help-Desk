@@ -73,25 +73,25 @@
                                     <div class="wizard-step" data-wizard-type="step">
                                         <div class="wizard-wrapper">
                                             <div class="wizard-icon">
-																<span class="svg-icon svg-icon-2x">
-																	<!--begin::Svg Icon | path:assets/media/svg/icons/General/Thunder-move.svg-->
-																	<svg xmlns="http://www.w3.org/2000/svg"
-                                                                         xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                                         width="24px" height="24px" viewBox="0 0 24 24"
-                                                                         version="1.1">
-																		<g stroke="none" stroke-width="1" fill="none"
-                                                                           fill-rule="evenodd">
-																			<rect x="0" y="0" width="24" height="24"/>
-																			<path
-                                                                                d="M16.3740377,19.9389434 L22.2226499,11.1660251 C22.4524142,10.8213786 22.3592838,10.3557266 22.0146373,10.1259623 C21.8914367,10.0438285 21.7466809,10 21.5986122,10 L17,10 L17,4.47708173 C17,4.06286817 16.6642136,3.72708173 16.25,3.72708173 C15.9992351,3.72708173 15.7650616,3.85240758 15.6259623,4.06105658 L9.7773501,12.8339749 C9.54758575,13.1786214 9.64071616,13.6442734 9.98536267,13.8740377 C10.1085633,13.9561715 10.2533191,14 10.4013878,14 L15,14 L15,19.5229183 C15,19.9371318 15.3357864,20.2729183 15.75,20.2729183 C16.0007649,20.2729183 16.2349384,20.1475924 16.3740377,19.9389434 Z"
-                                                                                fill="#000000"/>
-																			<path
-                                                                                d="M4.5,5 L9.5,5 C10.3284271,5 11,5.67157288 11,6.5 C11,7.32842712 10.3284271,8 9.5,8 L4.5,8 C3.67157288,8 3,7.32842712 3,6.5 C3,5.67157288 3.67157288,5 4.5,5 Z M4.5,17 L9.5,17 C10.3284271,17 11,17.6715729 11,18.5 C11,19.3284271 10.3284271,20 9.5,20 L4.5,20 C3.67157288,20 3,19.3284271 3,18.5 C3,17.6715729 3.67157288,17 4.5,17 Z M2.5,11 L6.5,11 C7.32842712,11 8,11.6715729 8,12.5 C8,13.3284271 7.32842712,14 6.5,14 L2.5,14 C1.67157288,14 1,13.3284271 1,12.5 C1,11.6715729 1.67157288,11 2.5,11 Z"
-                                                                                fill="#000000" opacity="0.3"/>
-																		</g>
-																	</svg>
-                                                                    <!--end::Svg Icon-->
-																</span>
+                                                <span class="svg-icon svg-icon-2x">
+                                                    <!--begin::Svg Icon | path:assets/media/svg/icons/General/Thunder-move.svg-->
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                         xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                         width="24px" height="24px" viewBox="0 0 24 24"
+                                                         version="1.1">
+                                                        <g stroke="none" stroke-width="1" fill="none"
+                                                           fill-rule="evenodd">
+                                                            <rect x="0" y="0" width="24" height="24"/>
+                                                            <path
+                                                                d="M16.3740377,19.9389434 L22.2226499,11.1660251 C22.4524142,10.8213786 22.3592838,10.3557266 22.0146373,10.1259623 C21.8914367,10.0438285 21.7466809,10 21.5986122,10 L17,10 L17,4.47708173 C17,4.06286817 16.6642136,3.72708173 16.25,3.72708173 C15.9992351,3.72708173 15.7650616,3.85240758 15.6259623,4.06105658 L9.7773501,12.8339749 C9.54758575,13.1786214 9.64071616,13.6442734 9.98536267,13.8740377 C10.1085633,13.9561715 10.2533191,14 10.4013878,14 L15,14 L15,19.5229183 C15,19.9371318 15.3357864,20.2729183 15.75,20.2729183 C16.0007649,20.2729183 16.2349384,20.1475924 16.3740377,19.9389434 Z"
+                                                                fill="#000000"/>
+                                                            <path
+                                                                d="M4.5,5 L9.5,5 C10.3284271,5 11,5.67157288 11,6.5 C11,7.32842712 10.3284271,8 9.5,8 L4.5,8 C3.67157288,8 3,7.32842712 3,6.5 C3,5.67157288 3.67157288,5 4.5,5 Z M4.5,17 L9.5,17 C10.3284271,17 11,17.6715729 11,18.5 C11,19.3284271 10.3284271,20 9.5,20 L4.5,20 C3.67157288,20 3,19.3284271 3,18.5 C3,17.6715729 3.67157288,17 4.5,17 Z M2.5,11 L6.5,11 C7.32842712,11 8,11.6715729 8,12.5 C8,13.3284271 7.32842712,14 6.5,14 L2.5,14 C1.67157288,14 1,13.3284271 1,12.5 C1,11.6715729 1.67157288,11 2.5,11 Z"
+                                                                fill="#000000" opacity="0.3"/>
+                                                        </g>
+                                                    </svg>
+                                                    <!--end::Svg Icon-->
+                                                </span>
                                             </div>
                                             <div class="wizard-label">
                                                 <h3 class="wizard-title">Complain Details</h3>
@@ -487,6 +487,21 @@
                                                                         <div class="col-xl-6">
                                                                             <!--begin::Input-->
                                                                             <div class="form-group">
+                                                                                <label>Product Remark</label>
+                                                                                <textarea type="text"
+                                                                                          placeholder="Enter Remark"
+                                                                                          class="form-control"
+                                                                                          style="width: 300px"
+                                                                                          id="pro_remark_2"
+                                                                                          name="pro_remark"><?php echo $item['pro_remark']; ?></textarea>
+                                                                            </div>
+                                                                            <!--end::Input-->
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-xl-6">
+                                                                            <!--begin::Input-->
+                                                                            <div class="form-group">
                                                                                 <label>&nbsp;</label>
                                                                                 <a href="javascript:;"
                                                                                    style="width: 300px;"
@@ -497,7 +512,7 @@
                                                                                     Information</a>
                                                                             </div>
                                                                         </div>
-                                                                        @if($action!='UPDATE')
+                                                                        {{--@if($action!='UPDATE')--}}
                                                                             <div class="col-xl-6">
                                                                                 <div class="form-group">
                                                                                     <label>&nbsp;</label>
@@ -508,7 +523,7 @@
                                                                                         <i class="la la-trash-o"></i>Delete</a>
                                                                                 </div>
                                                                             </div>
-                                                                        @endif
+                                                                        {{--@endif--}}
                                                                     </div>
                                                                 </div>
                                                                 <?php $temp++;
@@ -621,7 +636,7 @@
                                                                                 <select
                                                                                     class="form-control select2-control"
                                                                                     style="width: 300px"
-                                                                                    name="complain" multiple
+                                                                                    name="complain[]" multiple
                                                                                     id="complain_2">
                                                                                     <option value="">Select Complain
                                                                                     </option>
@@ -682,6 +697,21 @@
                                                                         <div class="col-xl-6">
                                                                             <!--begin::Input-->
                                                                             <div class="form-group">
+                                                                                <label>Product Remark</label>
+                                                                                <textarea type="text"
+                                                                                       placeholder="Enter Remark"
+                                                                                       class="form-control"
+                                                                                       style="width: 300px"
+                                                                                       id="pro_remark_2"
+                                                                                       name="pro_remark"></textarea>
+                                                                            </div>
+                                                                            <!--end::Input-->
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-xl-6">
+                                                                            <!--begin::Input-->
+                                                                            <div class="form-group">
                                                                                 <label>&nbsp;</label>
                                                                                 <a href="javascript:;"
                                                                                    style="width: 300px;"
@@ -694,7 +724,7 @@
                                                                             </div>
                                                                             <!--end::Input-->
                                                                         </div>
-                                                                        @if($action!='UPDATE')
+                                                                        {{--@if($action!='UPDATE')--}}
                                                                             <div class="col-xl-6">
                                                                                 <!--begin::Input-->
                                                                                 <div class="form-group">
@@ -707,7 +737,7 @@
                                                                                 </div>
                                                                                 <!--end::Input-->
                                                                             </div>
-                                                                        @endif
+                                                                        {{--@endif--}}
                                                                     </div>
                                                                 </div>
                                                                 <?php } ?>
@@ -935,6 +965,24 @@
                                                         </div>
                                                         <!--end::Input-->
                                                     </div>
+                                                    <div class="col-xl-6">
+                                                        <!--begin::Input-->
+                                                        <div class="form-group">
+                                                            <label>PinCode</label>
+                                                            <input type="text"
+                                                                   class="form-control {{ $errors->has('complain_pincode') ? ' is-invalid' : '' }}"
+                                                                   title="Enter PinCode"
+                                                                   id="complain_pincode" name="complain_pincode"
+                                                                   placeholder="Enter GST No."
+                                                                   value="{{ ((!empty($complain[0]['complain_pincode'])) ?$complain[0]['complain_pincode'] :old('complain_pincode')) }}">
+                                                            @if ($errors->has('complain_pincode'))
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong>{{ $errors->first('complain_pincode') }}</strong>
+                                                                </span>
+                                                            @endif
+                                                        </div>
+                                                        <!--end::Input-->
+                                                    </div>
                                                 </div>
                                                 <div class="row" style="display: none" id="no_warranty">
                                                     <div class="col-xl-12">
@@ -1072,6 +1120,7 @@
                     document.getElementById("district").value = obj['district_id'];
                     document.getElementById("email_address").value = obj['complain_email'];
                     document.getElementById("complain_gst").value = obj['complain_gst'];
+                    document.getElementById("complain_pincode").value = obj['complain_pincode'];
                     var is_no_warranty = obj['is_no_warranty'];
                     if (is_no_warranty == 'Y') {
                         $("#no_warranty").show();

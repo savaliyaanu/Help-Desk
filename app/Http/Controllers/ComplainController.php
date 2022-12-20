@@ -24,17 +24,19 @@ class ComplainController extends Controller
      */
     public function index(Request $request)
     {
-        $complain = Complain::with('getClients')->with('getCity.getDistrict.getState')
-            ->select('complain.*', DB::raw("CONCAT(topland.user_master.user_fname,' ',topland.user_master.user_lname) as assign_name"),
-                DB::raw("(select CONCAT(RIGHT (YEAR(date_from), 2),'-',RIGHT (YEAR(date_to), 2))from financial_year as p WHERE p.financial_id = complain.financial_id) as fyear"), 'users.name')
-            ->leftJoin('topland.user_master', 'topland.user_master.user_id', '=', 'complain.assign_id')
-            ->leftJoin('users', 'users.user_id', '=', 'complain.created_id')
-            ->leftJoin('financial_year', 'financial_year.financial_id', '=', 'complain.financial_id')
-            ->where('complain.branch_id', '=', Auth::user()->branch_id)
-            ->orderByDesc('complain.complain_id')
-            ->paginate(20);
-        return view('complains.index')->with(compact('complain'));
-//        return view('complains.index')->with('AJAX_PATH', 'get-complain-detail-table-view');
+//        DB::enableQueryLog();
+//        $complain = Complain::with('getClients')->with('getCity.getDistrict.getState')
+//            ->select('complain.*', DB::raw("CONCAT(topland.user_master.user_fname,' ',topland.user_master.user_lname) as assign_name"),
+//                DB::raw("(select CONCAT(RIGHT (YEAR(date_from), 2),'-',RIGHT (YEAR(date_to), 2))from financial_year as p WHERE p.financial_id = complain.financial_id) as fyear"), 'users.name')
+//            ->leftJoin('topland.user_master', 'topland.user_master.user_id', '=', 'complain.assign_id')
+//            ->leftJoin('users', 'users.user_id', '=', 'complain.created_id')
+//            ->leftJoin('financial_year', 'financial_year.financial_id', '=', 'complain.financial_id')
+//            ->where('complain.branch_id', '=', Auth::user()->branch_id)
+//            ->orderByDesc('complain.complain_id')
+//            ->get();
+////        dd(\DB::getQueryLog());exit;
+//        return view('complains.index')->with(compact('complain'));
+        return view('complains.index')->with('AJAX_PATH', 'get-complain');
     }
 
     public function getData()
@@ -66,7 +68,8 @@ class ComplainController extends Controller
             array('db' => 'complain_followup', 'dt' => 12),
             array('db' => 'complain_followup_history', 'dt' => 13),
             array('db' => 'complain_pdf', 'dt' => 14),
-            array('db' => 'edit', 'dt' => 15)
+            array('db' => 'edit', 'dt' => 15),
+            array('db' => 'delete', 'dt' => 16)
         );
         /** SQL server connection information */
         $sql_details = array(
@@ -80,8 +83,8 @@ class ComplainController extends Controller
          * If you just want to use the basic configuration for DataTables with PHP
          * server-side, there is no need to edit below this line.
          */
-
-        $dataRows = SSP::simple($_GET, $sql_details, $table, $primaryKey, $columns);
+        $where = "branch_id=" . Auth::user()->branch_id;
+        $dataRows = SSP::complex($_GET, $sql_details, $table, $primaryKey, $columns, "", $where);
         echo json_encode($dataRows);
     }
 
@@ -165,6 +168,7 @@ class ComplainController extends Controller
             'state' => $request->post('state'),
             'medium_id' => $request->post('medium_id'),
             'complain_gst' => $request->post('complain_gst'),
+            'complain_pincode' => $request->post('complain_pincode'),
             'created_id' => Auth::user()->user_id,
             'branch_id' => Auth::user()->branch_id,
             'created_at' => date('Y-m-d H:i:s'),
@@ -188,6 +192,8 @@ class ComplainController extends Controller
         DB::table('complain_medium_details')->insertGetId($complanMedium);
         $i = 0;
         DB::table('complain_log')->insert(['complain_id' => $ID, 'complain_status' => 'Complain Registered', 'created_id' => Auth::user()->user_id, 'created_at' => date('Y-m-d H:i:s')]);
+//        echo "<pre>";
+//        print_r($request->post('data'));die();
         if (!empty($request->post('data'))) {
 
             foreach ($request->post('data') as $row) {
@@ -203,18 +209,19 @@ class ComplainController extends Controller
                             'invoice_no' => $row['invoice_no'],
                             'invoice_date' => $row['invoice_date'],
                             'qty' => $row['qty'],
+                            'pro_remark' => $row['pro_remark'],
                             'branch_id' => Auth::user()->branch_id,
                             'created_id' => Auth::user()->user_id,
                             'application' => $row['application']
                         ]
                     );
 
-                    foreach ($row['complain'] as $complain) {
+                    foreach ($row['complain'] as $complain_inward) {
                         DB::table('multiple_product_complain')->insertGetId(
                             [
                                 'complain_id' => $ID,
                                 'complain_product_id' => $cid_id,
-                                'complain_in_word' => $complain,
+                                'complain_in_word' => $complain_inward,
                                 'created_id' => Auth::user()->user_id
                             ]
                         );
@@ -256,8 +263,7 @@ class ComplainController extends Controller
                 ->get()
                 ->toArray();
         $ComplainList = json_decode(json_encode($ComplainList), true);
-//        echo "<pre>";
-//        print_r($ComplainList);exit;
+
         $complain =
             DB::table('complain')
                 ->where('complain_id', '=', $id)
@@ -342,6 +348,7 @@ class ComplainController extends Controller
             'state' => $request->post('state'),
             'medium_id' => $request->post('medium_id'),
             'complain_gst' => $request->post('complain_gst'),
+            'complain_pincode' => $request->post('complain_pincode'),
             'updated_id' => Auth::user()->user_id,
             'updated_at' => date('Y-m-d H:i:s'),
         ];
@@ -366,6 +373,8 @@ class ComplainController extends Controller
         DB::table('complain_item_details')->where('complain_id', $complan_id)->update(['is_delete' => 'N']);
         $i = 0;
         if (!empty($request->post('data'))) {
+//            echo "<pre>";
+//            print_r($request->post('data'));exit;
             foreach ($request->post('data') as $row) {
                 if (!empty($row['product_id'])) {
                     $array = [
@@ -377,8 +386,10 @@ class ComplainController extends Controller
                         'warranty' => $row['warranty'],
                         'production_no' => $row['production_no'],
                         'invoice_no' => $row['invoice_no'],
+//                        'complain' => implode(',', $row['complain']),
                         'invoice_date' => $row['invoice_date'],
                         'qty' => $row['qty'],
+                        'pro_remark' => $row['pro_remark'],
                         'branch_id' => Auth::user()->branch_id,
                         'updated_id' => Auth::user()->user_id,
                         'application' => $row['application']
@@ -391,7 +402,7 @@ class ComplainController extends Controller
                         'product_id' => $row['product_id'],
                         'serial_no' => $row['sr_no'],
                         'warranty' => $row['warranty'],
-                        'complain' => $row['complain'],
+//                        'complain' => $row['complain'],
                         'production_no' => $row['production_no'],
                         'invoice_no' => $row['invoice_no'],
                         'invoice_date' => $row['invoice_date'],
@@ -460,7 +471,7 @@ class ComplainController extends Controller
         $client_id = $request->input('client_id');
         $clientDetail =
             DB::table('topland.client_master')
-                ->select('topland.client_master.gst_no as complain_gst', 'topland.client_master.email as complain_email', 'city_master.city_name', 'client_name', 'client_id', 'address1', 'address2', 'address3', 'client_master.city_id', 'client_master.state_id', 'client_master.district_id', 'client_master.mobile')
+                ->select('topland.client_master.gst_no as complain_gst','topland.client_master.pincode as complain_pincode', 'topland.client_master.email as complain_email', 'city_master.city_name', 'client_name', 'client_id', 'address1', 'address2', 'address3', 'client_master.city_id', 'client_master.state_id', 'client_master.district_id', 'client_master.mobile')
                 ->leftjoin('topland.city_master', 'city_master.city_id', '=', 'client_master.city_id')
                 ->where('client_id', '=', $client_id)
                 ->get()
@@ -931,9 +942,10 @@ class ComplainController extends Controller
         return json_encode(array('city_name' => $cityname->city_name, 'district_id' => $cityname->getDistrict->district_name, 'state' => $cityname->getDistrict->getState->state_name));
     }
 
-    public function saveComplainResolvedDate()
+    public function clearSearch(Request $request)
     {
-
+        $request->session()->forget('filtered_data');
+        return redirect(url('complain-detail'));
     }
 }
 

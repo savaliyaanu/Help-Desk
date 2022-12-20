@@ -82,7 +82,7 @@ class Helper
         Fpdf::SetFont('Courier', 'B', 15);
         Fpdf::Cell(190, 5, 'Complain', 0, 0, 'C');
         Fpdf::Ln(5);
-        Fpdf::SetWidths(array(95, 95));
+        Fpdf::SetWidths(array(99, 99));
         Fpdf::SetFont('Verdana', '', 8);
         Fpdf::Ln();
         if ($complains[0]->branch_id == 1) {
@@ -91,8 +91,13 @@ class Helper
             $complains_no = 'TE-TKT/' . $complains[0]->fyear . '/' . $complains[0]->complain_no;
         } elseif ($complains[0]->branch_id == 4) {
             $complains_no = 'TP-TKT/' . $complains[0]->fyear . '/' . $complains[0]->complain_no;
+        }else{
+            $complains_no = $complains[0]->complain_no;
         }
-        $field1 = (trim($complains[0]->client_name) . "\n" . trim($complains[0]->address)) . "\n" . 'City : ' . $complains[0]->city_name . "\n" . 'District : ' . $complains[0]->district . "\n" . 'State :' . $complains[0]->state . "\n" . 'PinCode :' . $complains[0]->pincode . "\n" . 'Mobile No. :' . $complains[0]->mobile . '/' . $complains[0]->mobile2 . "\n" . 'Email :' . $complains[0]->email_address;
+        $field1 = (trim($complains[0]->client_name) . "\n" . trim($complains[0]->address)) . "\n" . 'City : ' . $complains[0]->city_name .
+            "\n" . 'District : ' . $complains[0]->district . "\n" . 'State :' . $complains[0]->state .
+            "\n" . 'PinCode :' . $complains[0]->complain_pincode . "\n" . 'Mobile No. :' . $complains[0]->mobile . '/' . $complains[0]->mobile2 .
+            "\n" . 'Email :' . $complains[0]->email_address;
         $field2 = 'Complain No : ' . $complains_no . "\n" . 'Complain Date : ' . date('d-m-Y', strtotime($complains[0]->created_at)) . "\n" . 'Complain Type : ' . strtoupper($complains[0]->complain_type) . "\n" . strtoupper($mediumData) . "\n" . 'Assign Name : ' . strtoupper($complains[0]->assign_name) . "\n" . 'Complain Status : ' . strtoupper($complains[0]->complain_status);
         if ($complains[0]->complain_status == 'Resolved') {
             $field2 .= "\n" . 'Resolve Date : ' . date('d-m-Y h:i:s', strtotime($complains[0]->resolve_date));
@@ -111,7 +116,7 @@ class Helper
             Fpdf::Ln();
             Fpdf::Ln();
 
-            Fpdf::SetWidths(array(10, 25, 45, 20, 17, 20, 19, 27, 8));
+            Fpdf::SetWidths(array(10, 25, 53, 20, 17, 20, 19, 27, 8));
             Fpdf::SetFont('Verdana-Bold', 'B', 8);
             Fpdf::Row(array('No', 'Category', 'Product Name', 'Serial No.', 'Warranty', 'Pro. No', 'Invoice No', 'Invoice Date', 'Qty'), array('C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C'), '', array(), true);
             Fpdf::SetFont('Verdana', '', 8);
@@ -120,18 +125,17 @@ class Helper
                 $total_QTy += $value->qty;
             }
             Fpdf::SetFont('Verdana-Bold', 'B', 8);
-            Fpdf::Row(array('', '', 'Total Qty', '', '', '', '', '', $total_QTy), array('C', 'C', 'L', 'L', 'L', 'L', 'L', 'L', 'L'), '', array(), true, 4);
+            Fpdf::Row(array('', '', 'Total Qty', '', '', '', '', '', $total_QTy), array('C', 'C', 'L', 'L', 'L', 'L', 'L', 'L', 'C'), '', array(), true, 4);
         }
         $complain_problem = DB::table('complain_item_details')
-            ->select('complain.complain_type', 'complain_item_details.complain', 'complain_item_details.application',
+            ->select('complain.complain_type', 'complain_item_details.complain', 'complain_item_details.application','complain_item_details.pro_remark',
                 'complain_item_details.solution', 'complain_item_details.solution_by', 'topland.product_master.product_name',
                 DB::raw("(select group_concat(complain_in_word) from multiple_product_complain as p WHERE p.complain_product_id = complain_item_details.cid_id) as product_complain"))
             ->join('complain', 'complain.complain_id', '=', 'complain_item_details.complain_id')
             ->join('topland.product_master', 'topland.product_master.product_id', '=', 'complain_item_details.product_id')
             ->where('complain_item_details.complain_id', '=', $complain_id)
             ->get();
-//        echo "<pre>";
-//        print_r($complain_problem);exit;
+
         $test = 1;
         if (!empty($complain_problem[0]->complain_type)) {
             Fpdf::Ln();
@@ -142,12 +146,12 @@ class Helper
             Fpdf::Ln();
             Fpdf::Ln();
 
-            Fpdf::SetWidths(array(10, 49, 33, 33, 35, 32));
+            Fpdf::SetWidths(array(7, 38, 33, 28,26, 35, 32));
             Fpdf::SetFont('Verdana-Bold', 'B', 8);
-            Fpdf::Row(array('No', 'Product Name', 'Complain', 'Application', 'Solution', 'Solution By'), array('C', 'C', 'C', 'C', 'C', 'C'), '', array(), true);
+            Fpdf::Row(array('No', 'Product Name', 'Complain', 'Application', 'Remark','Solution', 'Solution By'), array('C', 'C','C', 'C', 'C', 'C', 'C'), '', array(), true);
             Fpdf::SetFont('Verdana', '', 8);
             foreach ($complain_problem as $value) {
-                Fpdf::Row(array($test++, strtoupper($value->product_name), strtoupper($value->product_complain), strtoupper($value->application), strtoupper($value->solution), strtoupper($value->solution_by)), array('L', 'L', 'L', 'L', 'L', 'L'), '', array(), true);
+                Fpdf::Row(array($test++, strtoupper($value->product_name), strtoupper($value->product_complain), strtoupper($value->application), strtoupper($value->pro_remark), strtoupper($value->solution), strtoupper($value->solution_by)), array('L', 'L', 'L','L', 'L', 'L', 'L'), '', array(), true);
             }
         }
         $problem = DB::table('complain')
@@ -280,9 +284,11 @@ WHERE
     public static function challanPDF($challan_id)
     {
         $orderList = DB::table('challan')
-            ->select('challan.created_at as challan_date', 'billty.*', 'topland.transport_master.transport_name', 'complain.*', 'complain.mobile as contact_no'
+            ->select('challan.created_at as challan_date', 'billty.*', 'topland.transport_master.transport_name', 'complain.*',
+                'complain.mobile as contact_no'
                 , 'topland.city_master.city_name', 'topland.district_master.district_name',
-                'topland.state_master.state_name', 'challan.*', 'topland.client_master.mobile', 'topland.client_master.pincode', 'topland.client_master.email as email_address',
+                'topland.state_master.state_name', 'challan.*', 'topland.client_master.mobile', 'topland.client_master.pincode',
+                'topland.client_master.email as email_address',
                 DB::raw("(select concat(right(year(date_from),2),'-',right(year(date_to),2)) from financial_year as p WHERE p.financial_id = complain.financial_id) as fyear"))
             ->leftJoin('billty', 'billty.billty_id', '=', 'challan.billty_id')
             ->leftJoin('topland.transport_master', 'topland.transport_master.transport_id', '=', 'billty.transport_id')
@@ -372,6 +378,7 @@ WHERE
         Fpdf::Image("./images/LogoWatera.jpg", 32, 60, 150, 0);
 
         Fpdf::SetFont('Verdana', '', 8);
+
         /** print address */
         Fpdf::Row(array(
             (trim($client_name) . "\n" . trim($address) . "\n" .
@@ -380,17 +387,17 @@ WHERE
                 trim($pincode) . "\n" . trim($email_add)),
             'Complain No : ' . $complains_no . "\n" .
             'Complain Date : ' . date('d/m/Y', strtotime($complain->complain_date)) . "\n" .
-//            'Challan Date : ' . date('d/m/Y', strtotime($orderList->challan_date)) . "\n" .
             'Transport : ' . $orderList->transport_name . "\n" .
+            'Vehicle No : ' .  $orderList->vehicle_no. "\n" .
             'LR No. :' . $orderList->lr_no . "\n" .
             'LR Date. :' . date('d/m/Y', strtotime($orderList->lr_date)) . "\n" .
             'Freight By : ' . $orderList->freight_rs_by . "\n" .
             'Freight Rs. : ' . $orderList->freight_rs
         ), array('L', 'L'), '', '', true, 4);
         Fpdf::Ln();
-        Fpdf::SetWidths(array(10, 15, 74, 49, 21, 21));
+        Fpdf::SetWidths(array(10, 9, 60, 39,30, 21, 21));
         Fpdf::SetFont('Verdana-Bold', 'B', 8);
-        Fpdf::Row(array('No.', 'Qty.', "Item Description", 'Shortage Item', 'Serial No.', 'Pro. No.'), array('C', 'C', 'L', 'L', 'C', 'C'), '', array(), true);
+        Fpdf::Row(array('No.', 'Qty.', "Item Description", 'Shortage Item', 'Pro. Remark','Serial No.', 'Pro. No.'), array('C', 'C','C', 'C', 'C', 'C', 'C'), '', array(), true);
         Fpdf::SetFont('Verdana', '', 8);
         if (!empty($challanItem)) {
             $temp = 1;
@@ -448,13 +455,14 @@ WHERE
                     $sp_qry . ' ' . $unit_name . !empty($value->quantity) ? $value->quantity : '',
                     $value->getProduct->product_name . " - " . strtoupper(Helper::ProductString($value['product_id'], $value['category_id'])) . $opt_item . " - " . 'Weight : ' . $value->getProduct->n_wt,
                     $shortageName,
+                    ucwords($value['pro_remark']),
                     rtrim($value['serial_no']),
                     $value->production_no
-                ), array('C', 'L', 'L', 'L', 'C', 'C', 'C'), '', array(), true, 5);
+                ), array('C', 'L', 'L', 'L', 'C','C', 'C', 'C'), '', array(), true, 5);
                 $temp++;
             }
             Fpdf::SetFont('Verdana-Bold', 'B', 8);
-            Fpdf::Row(array('', $itm_grand_total, 'Total Qty', '', '', ''), array('C', 'C', 'L', 'L', 'L', 'L'), '', array(), true, 4);
+            Fpdf::Row(array('', $itm_grand_total, 'Total Qty', '', '','', ''), array('C', 'C', 'L', 'L', 'L', 'L', 'L'), '', array(), true, 4);
             Fpdf::Ln();
         }
 
@@ -1309,7 +1317,7 @@ WHERE
             Fpdf::CellFitScale(151, 5, (!empty($inspectionDetail->company_observation)) ? $inspectionDetail->company_observation : '', 'B', 0, 'L');
             Fpdf::Ln(7);
             Fpdf::Cell(196, 5, '', 'B', 0, 'L');
-            Fpdf::Ln(25);
+            Fpdf::Ln(18);
             if (in_array($row->category_id, array(6, 7, 11, 12))) {
 
                 Fpdf::Cell(5);
@@ -1332,15 +1340,17 @@ WHERE
                     Fpdf::Cell(24, 5, 'BIREN BHAI. ', '', 0, 'C');
                     Fpdf::Cell(14);
                     Fpdf::Cell(25, 5, 'NILESH BHAI. ', '', 0, 'C');
-                    Fpdf::Ln();
+                    Fpdf::Ln(10);
                 } else {
                     if ($row->category_id == 5) {
-                        Fpdf::Cell(40);
+                        Fpdf::Cell(30);
                         Fpdf::Cell(25, 5, 'PARESH BHAI. ', '', 0, 'C');
                         Fpdf::Cell(10);
                         Fpdf::Cell(25, 5, 'MOHIT BHAI. ', '', 0, 'C');
                         Fpdf::Cell(14);
                         Fpdf::Cell(25, 5, 'NILESH BHAI. ', '', 0, 'C');
+                        Fpdf::Cell(14);
+                        Fpdf::Cell(25, 5, 'GAUTAM BHAI. ', '', 0, 'C');
                     } else {
                         Fpdf::Cell(25, 5, 'GAUTAM BHAI ', '', 0, 'C');
                         Fpdf::Cell(5);
@@ -1453,10 +1463,8 @@ WHERE
             Fpdf::Ln(10);
             Fpdf::Cell(45, 5, 'COMPANY OBSERVATION :- ', '', 0, 'L');
             Fpdf::CellFitScale(151, 5, '', 'B', 0, 'L');
-            Fpdf::Ln(18);
+            Fpdf::Ln(5);
 
-
-            Fpdf::Cell(5);
             Fpdf::Cell(25, 5, 'GAUTAM BHAI. ', '', 0, 'C');
             Fpdf::Cell(5);
             Fpdf::Cell(25, 5, 'PRIYANK BHAI. ', '', 0, 'C');
@@ -1771,7 +1779,7 @@ WHERE
     public static function CGSTReport($invoice_id)
     {
         $order_list = DB::table('invoice')
-            ->select('invoice.*', 'challan.challan_id', 'challan.challan_no as challan_rno', 'complain.complain_no', 'complain.created_at as date', 'challan.created_at', 'challan.change_bill_address as billing_change', 'invoice.lr_no', 'invoice.lr_date', 'billty.client_id', 'topland.transport_master.transport_name',
+            ->select('invoice.*', 'challan.challan_id', 'challan.challan_no as challan_rno', 'complain.complain_no', 'complain.created_at as complain_date', 'challan.created_at', 'challan.change_bill_address as billing_change', 'invoice.lr_no', 'invoice.lr_date', 'billty.client_id', 'topland.transport_master.transport_name',
                 DB::raw('ifnull((select sum(accessories_qty) from challan_accessories
                 WHERE challan_accessories.challan_id = invoice.challan_id),0) as acce_qunt'), 'users.name', 'users.company_id', 'invoice_items.challan_product_id', 'challan.change_bill_address', 'challan.created_at as challan_date',
                 DB::raw("(select concat(right(year(date_from),2),'-',right(year(date_to),2)) from financial_year as p WHERE p.financial_id = invoice.financial_id) as fyear"),
@@ -1909,19 +1917,26 @@ WHERE
         Fpdf::Cell(47, 4, 'Date : ' . date("d-m-Y", strtotime($order_list[0]->invoice_date)), 1, 0, 'L');
         Fpdf::Ln();
         Fpdf::Cell(97, 4, trim($company[0]->company_name), 'RL', 0);
-        Fpdf::Cell(50, 4, 'Transport : ', 1, 0, 'L');
-        Fpdf::Cell(47, 4, $order_list[0]->transport_name, 1, 0, 'L');
+        Fpdf::Cell(14, 4, 'Tran. : ', 1, 0, 'L');
+        Fpdf::Cell(83, 4, strtolower(ucwords($order_list[0]->transport_name)), 1, 0, 'L');
         Fpdf::Ln();
         Fpdf::Cell(97, 4, $company[0]->address1, 'RL', 0);
 
-        Fpdf::Cell(50, 4, 'LR No : ' . $order_list[0]->lr_no, 1, 0, 'L');
-        Fpdf::Cell(47, 4, 'LR Date : ' . date("d-m-Y", strtotime($order_list[0]->lr_date)), 1, 0, 'L');
+        if ($order_list[0]->branch_id == 1) {
+            $complain_no = 'PF-TKT/' . $order_list[0]->fyear . '/' . $order_list[0]->complain_no;
+        } elseif ($order_list[0]->branch_id == 3) {
+            $complain_no = 'TE-TKT/' . $order_list[0]->fyear . '/' . $order_list[0]->complain_no;
+        } elseif ($order_list[0]->branch_id == 4) {
+            $complain_no = 'TP-TKT/' . $order_list[0]->fyear . '/' . $order_list[0]->complain_no;
+        }
+        Fpdf::Cell(50, 4, 'TKT No : '.$complain_no, 1, 0, 'L');
+        Fpdf::Cell(47, 4, 'TKT Dt : '. date("d-m-Y", strtotime($order_list[0]->complain_date)), 1, 0, 'L');
 
         Fpdf::Ln();
         Fpdf::Cell(97, 4, $company[0]->address2 . ' ' . $company[0]->address3, 'RL', 0);
+        Fpdf::Cell(50, 4, 'LR No : ' . $order_list[0]->lr_no, 1, 0, 'L');
+        Fpdf::Cell(47, 4, 'LR Date : ' . date("d-m-Y", strtotime($order_list[0]->lr_date)), 1, 0, 'L');
 
-        Fpdf::Cell(50, 4, '', 1, 0, 'L');
-        Fpdf::Cell(47, 4, '', 1, 0, 'L');
         Fpdf::Ln();
         Fpdf::Cell(97, 4,
             $company[0]->city_name . '-' . $company[0]->pincode . ' Dist:' . $company[0]->district_name . ' State.' . $company[0]->state_name,
@@ -1968,14 +1983,14 @@ WHERE
         if ($order_list[0]->change_develiry_address == 'Y') {
 
             $client_address_data_change_delivery = DB::table('invoice')
-                ->select('invoice.billing_name as client_name', 'invoice.address1', 'invoice.address2', 'invoice.address3', 'topland.city_master.city_name', 'topland.district_master.district_name', 'topland.state_master.state_name', 'invoice.gst_no')
+                ->select('invoice.billing_name as client_name','invoice.mobile', 'invoice.address1', 'invoice.pincode','invoice.address2', 'invoice.address3', 'topland.city_master.city_name', 'topland.district_master.district_name', 'topland.state_master.state_name', 'invoice.gst_no')
                 ->leftJoin('topland.city_master', 'topland.city_master.city_id', '=', 'invoice.city_id')
                 ->leftJoin('topland.district_master', 'topland.district_master.district_id', '=', 'city_master.district_id')
                 ->leftJoin('topland.state_master', 'topland.state_master.state_id', '=', 'district_master.state_id')
                 ->where('invoice.invoice_id', '=', $invoice_id)
                 ->get();
             Fpdf::SetWidths(array(194));
-            Fpdf::Row(array('DELIVERY AT : ' . strtoupper($client_address_data_change_delivery[0]->client_name) . "\n" . 'ADDRESS : ' . strtoupper($client_address_data_change_delivery[0]->address1) . " " . strtoupper($client_address_data_change_delivery[0]->address2) . " " . strtoupper($client_address_data_change_delivery[0]->address3) . " " . 'CITY: ' . strtoupper($client_address_data_change_delivery[0]->city_name) . " " . 'DISTRICT: ' . strtoupper($client_address_data_change_delivery[0]->district_name) . " " . 'STATE: ' . strtoupper($client_address_data_change_delivery[0]->state_name . "\n" . 'GSTIN : ' . strtoupper($client_address_data_change_delivery[0]->gst_no))),
+            Fpdf::Row(array('DELIVERY AT : ' . strtoupper($client_address_data_change_delivery[0]->client_name) . "\n" . 'ADDRESS : ' . strtoupper($client_address_data_change_delivery[0]->address1) . " " . strtoupper($client_address_data_change_delivery[0]->address2) . " " . strtoupper($client_address_data_change_delivery[0]->address3) . " " . 'CITY: ' . strtoupper($client_address_data_change_delivery[0]->city_name) . " " . 'DISTRICT: ' . strtoupper($client_address_data_change_delivery[0]->district_name) . " " . 'STATE: ' . strtoupper($client_address_data_change_delivery[0]->state_name . "\n" . 'GSTIN : ' . strtoupper($client_address_data_change_delivery[0]->gst_no). "\n" . 'Contact No : ' . strtoupper($client_address_data_change_delivery[0]->mobile). "\n" . 'PinCode : ' . strtoupper($client_address_data_change_delivery[0]->pincode))),
                 array('L'), '', array(''), true);
         }
 
@@ -2173,7 +2188,7 @@ WHERE
         ),
             array('C', 'L', 'C', 'C', 'C', 'C', 'L', 'C'), '', '', true);
         $round_off = abs(round($lasttotal_finaltotal) - $lasttotal_finaltotal);
-        Fpdf::SetWidths(array(30, 44, 25, 35, 25, 35));
+        Fpdf::SetWidths(array(54, 30, 20, 35, 20, 35));
         Fpdf::SetFont('Verdana-Bold', 'B', 8);
         Fpdf::Row(array(
             'HSN',
@@ -2196,7 +2211,7 @@ WHERE
             $sgstPrice = ($lastTotal * $value['sgst']) / 100;
 
             Fpdf::Row(array(
-                $value['hsn'],
+                $value['hsn'].' Qty '.'('.$value['qty'].')',
                 $lastTotal,
                 $value['sgst'] . '%',
                 round($sgstPrice),
@@ -2307,7 +2322,7 @@ WHERE
     public static function IGSTReport($invoice_id)
     {
         $order_list = DB::table('invoice')
-            ->select('invoice.*', 'challan.challan_id', 'challan.challan_no as challan_rno', 'complain.complain_no', 'complain.created_at as date', 'challan.created_at', 'challan.change_bill_address as billing_change', 'invoice.lr_no', 'invoice.lr_date', 'billty.client_id', 'topland.transport_master.transport_name',
+            ->select('invoice.*', 'challan.challan_id', 'challan.challan_no as challan_rno', 'complain.complain_no', 'complain.created_at as complain_date', 'challan.created_at', 'challan.change_bill_address as billing_change', 'invoice.lr_no', 'invoice.lr_date', 'billty.client_id', 'topland.transport_master.transport_name',
                 DB::raw('ifnull((select sum(accessories_qty) from challan_accessories
                 WHERE challan_accessories.challan_id = invoice.challan_id),0) as acce_qunt'), 'users.name', 'users.company_id', 'invoice_items.challan_product_id', 'challan.change_bill_address', 'challan.created_at as challan_date',
                 DB::raw("(select concat(right(year(date_from),2),'-',right(year(date_to),2)) from financial_year as p WHERE p.financial_id = invoice.financial_id) as fyear"),
@@ -2322,7 +2337,6 @@ WHERE
             ->leftJoin('invoice_items', 'invoice_items.invoice_id', '=', 'invoice.invoice_id')
             ->where('invoice.invoice_id', '=', $invoice_id)
             ->get();
-
 
         $company = DB::table('company_master')
             ->select('company_master.*', 'topland.city_master.city_name', 'topland.district_master.district_name', 'branch_master.*', 'topland.state_master.state_name', 'topland.godown_master.gst')
@@ -2446,18 +2460,25 @@ WHERE
         Fpdf::Cell(47, 4, 'Date : ' . date("d-m-Y", strtotime($order_list[0]->invoice_date)), 1, 0, 'L');
         Fpdf::Ln();
         Fpdf::Cell(97, 4, trim($company[0]->company_name), 'RL', 0);
-        Fpdf::Cell(20, 4, 'Transport : ', 1, 0, 'L');
-        Fpdf::Cell(77, 4, $order_list[0]->transport_name, 1, 0, 'L');
+        Fpdf::Cell(14, 4, 'Tran. : ', 1, 0, 'L');
+        Fpdf::Cell(83, 4, ucwords(strtolower($order_list[0]->transport_name)), 1, 0, 'L');
         Fpdf::Ln();
         Fpdf::Cell(97, 4, $company[0]->address1, 'RL', 0);
 
-        Fpdf::Cell(50, 4, 'LR No : ' . $order_list[0]->lr_no, 1, 0, 'L');
-        Fpdf::Cell(47, 4, 'LR Date : ' . date("d-m-Y", strtotime($order_list[0]->lr_date)), 1, 0, 'L');
+        if ($order_list[0]->branch_id == 1) {
+            $complain_no = 'PF-TKT/' . $order_list[0]->fyear . '/' . $order_list[0]->complain_no;
+        } elseif ($order_list[0]->branch_id == 3) {
+            $complain_no = 'TE-TKT/' . $order_list[0]->fyear . '/' . $order_list[0]->complain_no;
+        } elseif ($order_list[0]->branch_id == 4) {
+            $complain_no = 'TP-TKT/' . $order_list[0]->fyear . '/' . $order_list[0]->complain_no;
+        }
+        Fpdf::Cell(50, 4, 'TKT No : ' . $complain_no, 1, 0, 'L');
+        Fpdf::Cell(47, 4, 'TKT Dt : ' . date("d-m-Y", strtotime($order_list[0]->complain_date)), 1, 0, 'L');
 
         Fpdf::Ln();
         Fpdf::Cell(97, 4, $company[0]->address2 . ' ' . $company[0]->address3, 'RL', 0);
-        Fpdf::Cell(50, 4, '', 1, 0, 'L');
-        Fpdf::Cell(47, 4, '', 1, 0, 'L');
+        Fpdf::Cell(50, 4, 'LR No :'. $order_list[0]->lr_no, 1, 0, 'L');
+        Fpdf::Cell(47, 4, 'LR Date : ' . date("d-m-Y", strtotime($order_list[0]->lr_date)), 1, 0, 'L');
         Fpdf::Ln();
         Fpdf::Cell(97, 4, 'City : ' . $company[0]->city_name . '-' . $company[0]->pincode . ' Dist : ' . $company[0]->district_name .
             ' State. : ' . $company[0]->state_name,
@@ -2483,7 +2504,6 @@ WHERE
         Fpdf::Cell(97, 4, '', 'RLB', 0);
         Fpdf::Cell(50, 4, '', 1, 0, 'L');
         Fpdf::Cell(47, 4, '', 1, 0, 'L');
-        Fpdf::Ln();
         Fpdf::Ln();
         Fpdf::SetFont('Verdana-Bold', 'B', 8);
         Fpdf::Cell(97, 4, 'Billing Address', 'TRL', 0);
@@ -2713,7 +2733,7 @@ WHERE
             $igstPrice = ($lastTotal * $value['igst']) / 100;
 
             Fpdf::Row(array(
-                $value['hsn'],
+                $value['hsn'].' Qty '.'('.$value['qty'].')',
                 $lastTotal,
                 $value['igst'] . '%',
                 round($igstPrice)
@@ -3228,7 +3248,7 @@ WHERE
 		GROUP BY
 			replacement_traveling_expense.traveling_expense_id
 		ORDER BY
-			replacement_traveling_expense.traveling_expense_id DESC LIMIT 1");
+			replacement_traveling_expense.traveling_expense_id ASC LIMIT 1");
 
 
         $replacement_other_expense = DB::table('replacement_other_expense')
@@ -3712,7 +3732,7 @@ WHERE
     {
         $total_rows = 20;
         $company_detail = DB::table('delivery_challan_out')
-            ->select('company_master.company_name', 'company_master.phone as phne', 'company_master.address1 as c_a1', 'company_master.address2 as c_a2', 'company_master.address3 as c_a3', 'topland.city_master.city_name',
+            ->select('company_master.company_name', 'delivery_challan_out.created_at as doc_date','company_master.phone as phne', 'company_master.address1 as c_a1', 'company_master.address2 as c_a2', 'company_master.address3 as c_a3', 'topland.city_master.city_name',
                 'delivery_challan_out.lr_no', 'complain.client_name', 'complain.district as dis', 'complain.state as stat', 'complain.complain_no', 'complain.created_at as complain_date', 'topland.district_master.district_name',
                 'delivery_challan_out.delivery_challan_no', 'delivery_challan_out.despatched_through', 'delivery_challan_out.destination', 'delivery_challan_out.transport_vehicle',
                 'topland.state_master.state_name', 'challan.*', 'branch_master.gst_no',
@@ -3735,7 +3755,7 @@ WHERE
             ->first();
 
         $product_list = DB::table('delivery_challan_out_product')
-            ->select('topland.product_master.*', 'delivery_challan_out_product.*', 'topland.category_master.*', 'challan_item_master.*', 'topland.brand_master.*', DB::raw('challan_item_master.quantity as quantity'), 'complain_item_details.*')
+            ->select('topland.product_master.*', 'delivery_challan_out_product.*', 'topland.category_master.*', 'challan_item_master.*', 'topland.brand_master.*', DB::raw('delivery_challan_out_product.qty as quantity'), 'complain_item_details.*')
             ->join('challan_item_master', 'challan_item_master.challan_product_id', '=', 'delivery_challan_out_product.challan_product_id')
             ->join('complain_item_details', 'complain_item_details.cid_id', '=', 'challan_item_master.complain_product_id')
             ->join('topland.category_master', 'topland.category_master.category_id', '=', 'complain_item_details.category_id')
@@ -3810,8 +3830,8 @@ WHERE
         Fpdf::Cell(56, 4, $company_detail->lr_no, 1, 0, 'L');
         Fpdf::Ln();
         Fpdf::Cell(97, 4, '', 'RLB', 0);
-        Fpdf::Cell(41, 4, '', 1, 0, 'L');
-        Fpdf::Cell(56, 4, '', 1, 0, 'L');
+        Fpdf::Cell(41, 4, 'Doc Date :-', 1, 0, 'L');
+        Fpdf::Cell(56, 4, date("d-m-Y", strtotime($company_detail->doc_date)), 1, 0, 'L');
 
         Fpdf::Ln();
         Fpdf::SetFont('Verdana-Bold', 'B', 9);

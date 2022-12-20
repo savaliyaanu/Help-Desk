@@ -62,16 +62,14 @@ WHERE
 	challan.challan_id = $challan_id
 AND is_product_used = 'N'");
         $complainProductData = isset($complainProductData) ? $complainProductData : '';
-//echo "<pre>";
-//print_r($complainProductData);exit();
+
         $challanItem = ChallanProduct::with('getOptional.getProduct')->with('getOptionalSpare.getProduct')
             ->with('getShortageList.getShortageName')->with('getBrand')->with('getProduct')
             ->leftJoin('complain_item_details', 'complain_item_details.cid_id', '=', 'challan_item_master.complain_product_id')
             ->leftJoin('topland.product_master', 'topland.product_master.product_id', '=', 'complain_item_details.product_id')
             ->where('challan_id', $challan_id)
             ->get();
-//        echo "<prE>";
-//        print_r($challanItem);exit;
+
         $category_master = DB::table('topland.category_master')
             ->where('is_delete', '=', 'N')
             ->get()

@@ -67,8 +67,7 @@ class SupplierPendingProductReportController extends Controller
         $queryResult->where(DB::raw('DATE_FORMAT(delivery_challan_out.created_at,"%Y-%m-%d")'), '>=', $from);
         $queryResult->where(DB::raw('DATE_FORMAT(delivery_challan_out.created_at,"%Y-%m-%d")'), '<=', $to);
         $complainDetail = $queryResult->get();
-//echo "<pre>";
-//print_r($complainDetail);exit;
+
 
 
         Fpdf::AddPage();

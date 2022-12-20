@@ -108,7 +108,7 @@
                                 <span class="menu-text">Dashboard</span>
                             </a>
                         </li>
-                        <li class="menu-item menu-item-submenu {{ (request()->is('support-menu*')||request()->is('transport-master*')||request()->is('service-station-detail*')||request()->is('client-master*') ||request()->is('users*') || request()->is('company*') || request()->is('branch*') || request()->is('service-station*'))  ? 'menu-item-open' : '' }}"
+                        <li class="menu-item menu-item-submenu {{ (request()->is('support-menu*')||request()->is('transport-master*')||request()->is('product-master*')||request()->is('service-station-detail*')||request()->is('client-master*') ||request()->is('users*') || request()->is('company*') || request()->is('branch*') || request()->is('service-station*'))  ? 'menu-item-open' : '' }}"
                             aria-haspopup="true" data-menu-toggle="hover">
                             <a href="javascript:;" class="menu-link menu-toggle">
 										<span class="svg-icon menu-icon">
@@ -205,6 +205,14 @@
                                                 <span></span>
                                             </i>
                                             <span class="menu-text">Transport Detail</span>
+                                        </a>
+                                    </li><li class="menu-item {{ request()->is('product-master*') ? 'menu-item-active' : '' }}"
+                                        aria-haspopup="true">
+                                        <a href="{{route('product-master.index')}}" class="menu-link">
+                                            <i class="menu-bullet menu-bullet-dot">
+                                                <span></span>
+                                            </i>
+                                            <span class="menu-text">Product Master List</span>
                                         </a>
                                     </li>
                                     <li class="menu-item {{ request()->is('support-menu*') ? 'menu-item-active' : '' }}"

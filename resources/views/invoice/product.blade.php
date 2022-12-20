@@ -102,6 +102,17 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
+
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="ol-lg-6 col-form-label">Qty<span
+                                                        class="text-danger">*</span></label>
+                                                <div class="col-lg-4 form-group-sub">
+                                                    <input class="form-control " id="pro_qty"
+                                                            name="pro_qty" placeholder="Enter Qty"
+                                                           value="{{ ((!empty($invoiceItems->pro_qty)) ?$invoiceItems->pro_qty :old('pro_qty')) }}">
+
+                                                </div>
                                                 <div>
                                                     @if($action=='INSERT')
                                                         <button type="submit"
@@ -184,6 +195,7 @@
                             <tr>
                                 <th class="text-center">SR. No.</th>
                                 <th>Product Name</th>
+                                <th>Qty</th>
                                 <th class="text-center">Type Name</th>
                                 <th class="text-center">Actions</th>
                             </tr>
@@ -195,6 +207,7 @@
                                     <tr>
                                         <td class="text-center">{{ $i++ }}</td>
                                         <td>{{ $item->product_name }}</td>
+                                        <td>{{ $item->pro_qty }}</td>
                                         <td class="text-center">{{ $item->type }}</td>
                                         <td class="text-center">
                                             <form method="POST" style="display:inline;"

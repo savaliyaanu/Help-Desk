@@ -35,7 +35,9 @@ class BilltyController extends Controller
             ->leftJoin('users', 'users.user_id', '=', 'billty.created_id')
             ->leftJoin('role', 'role.role_id', '=', 'users.role_id')
             ->where('billty.branch_id', '=', Auth::user()->branch_id)
-            ->orderByDesc('billty.billty_id')->paginate(10);
+            ->orderByDesc('billty.billty_id')->get();
+//        echo "<pre>";
+//        print_r($billtyIndex);exit;
         return view('billty.index')->with(compact('branch_id', 'billtyIndex'));
 //        return view('billty.index')->with('AJAX_PATH', 'get-billty');
     }
@@ -50,30 +52,63 @@ class BilltyController extends Controller
         /** Table's primary key */
         $primaryKey = 'billty_id';
 
+
         /** Array of database columns which should be read and sent back to DataTables.
          * The `db` parameter represents the column name in the database, while the `dt`
          * parameter represents the DataTables column identifier. In this case simple
          * indexes */
-        $columns = array(
-            array('db' => 'complain_no', 'dt' => 0),
-            array('db' => 'date', 'dt' => 1),
-            array('db' => 'challan_type', 'dt' => 2),
-            array('db' => 'client_name', 'dt' => 3),
-            array('db' => 'lr_no', 'dt' => 4),
-            array('db' => 'lr_date', 'dt' => 5),
-            array('db' => 'handover_date', 'dt' => 6),
-            array('db' => 'billty_pdf', 'dt' => 7),
-            array('db' => 'hd_date', 'dt' => 8),
-            array('db' => 'edit', 'dt' => 9),
-            array('db' => 'delete', 'dt' => 10),
-        );
-
+        if (Auth::user()->branch_id == 1) {
+            $columns = array(
+                array('db' => 'complain_pf_prefix', 'dt' => 0),
+                array('db' => 'billty_pf_prefix', 'dt' => 1),
+                array('db' => 'date', 'dt' => 2),
+                array('db' => 'challan_type', 'dt' => 3),
+                array('db' => 'client_name', 'dt' => 4),
+                array('db' => 'lr_no', 'dt' => 5),
+                array('db' => 'lr_date', 'dt' => 6),
+                array('db' => 'handover_date', 'dt' => 7),
+                array('db' => 'billty_pdf', 'dt' => 8),
+                array('db' => 'hd_date', 'dt' => 9),
+                array('db' => 'edit', 'dt' => 10),
+                array('db' => 'delete', 'dt' => 11),
+            );
+        }elseif (Auth::user()->branch_id == 3){
+            $columns = array(
+                array('db' => 'complain_te_prefix', 'dt' => 0),
+                array('db' => 'billty_te_prefix', 'dt' => 1),
+                array('db' => 'date', 'dt' => 2),
+                array('db' => 'challan_type', 'dt' => 3),
+                array('db' => 'client_name', 'dt' => 4),
+                array('db' => 'lr_no', 'dt' => 5),
+                array('db' => 'lr_date', 'dt' => 6),
+                array('db' => 'handover_date', 'dt' => 7),
+                array('db' => 'billty_pdf', 'dt' => 8),
+                array('db' => 'hd_date', 'dt' => 9),
+                array('db' => 'edit', 'dt' => 10),
+                array('db' => 'delete', 'dt' => 11),
+            );
+        }elseif (Auth::user()->branch_id == 4){
+            $columns = array(
+                array('db' => 'complain_tp_prefix', 'dt' => 0),
+                array('db' => 'billty_tp_prefix', 'dt' => 1),
+                array('db' => 'date', 'dt' => 2),
+                array('db' => 'challan_type', 'dt' => 3),
+                array('db' => 'client_name', 'dt' => 4),
+                array('db' => 'lr_no', 'dt' => 5),
+                array('db' => 'lr_date', 'dt' => 6),
+                array('db' => 'handover_date', 'dt' => 7),
+                array('db' => 'billty_pdf', 'dt' => 8),
+                array('db' => 'hd_date', 'dt' => 9),
+                array('db' => 'edit', 'dt' => 10),
+                array('db' => 'delete', 'dt' => 11),
+            );
+        }
         /** SQL server connection information */
         $sql_details = array(
             'user' => env('DB_USERNAME', 'root@localhost'),
             'pass' => env('DB_PASSWORD', ''),
-            'db' => env('DB_DATABASE', 'helpdesk'),
-            'host' => env('DB_HOST', '172.16.14.121')
+            'db' => env('DB_DATABASE', 'test_helpdesk'),
+            'host' => env('DB_HOST', '172.16.6.50')
         );
 
         /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -93,8 +128,8 @@ class BilltyController extends Controller
     public function create()
     {
         $complainList = Complain::select(DB::raw("(select CONCAT(RIGHT (YEAR(date_from), 2),'-',RIGHT (YEAR(date_to), 2))from financial_year as p WHERE p.financial_id = complain.financial_id) as fyear"),
-        'complain.*')
-        ->where('branch_id', Auth::user()->branch_id)->get();
+            'complain.*')
+            ->where('branch_id', Auth::user()->branch_id)->get();
 
         $clientMaster = Clients::select('client_id', 'client_name')
             ->get();
@@ -152,6 +187,7 @@ class BilltyController extends Controller
         $billty->lr_no = $request->input('lr_no');
         $billty->lr_date = date('Y-m-d', strtotime(str_replace('/', '-', $request->input('lr_date'))));
         $billty->entry_by = $request->input('entry_by');
+        $billty->vehicle_no = $request->input('vehicle_no');
         $billty->remark = $request->input('remark');
         $billty->created_id = Auth::user()->user_id;
         $billty->branch_id = Auth::user()->branch_id;
@@ -208,22 +244,28 @@ class BilltyController extends Controller
      */
     public function edit(Billty $billty)
     {
+        $branch_id = Auth::user()->branch_id;
         $clientMaster =
             DB::table('topland.client_master')->where('client_id', $billty->client_id)
                 ->get()
                 ->toArray();
         $clientMaster = json_decode(json_encode($clientMaster), true);
-        $complainList = DB::table('helpdesk.complain')
+        $complainList = DB::table('complain')
+            ->select(DB::raw("(select CONCAT(RIGHT (YEAR(date_from), 2),'-',RIGHT (YEAR(date_to), 2))from financial_year as p WHERE p.financial_id = complain.financial_id) as fyear"),
+                'complain.*')
             ->where('branch_id', '=', Auth::user()->branch_id)
-            ->get()
-            ->toArray();
-        $complainList = json_decode(json_encode($complainList), true);
-        $transportReceive = DB::table('topland.transport_master')->where('transport_id', $billty->transport_id)
+            ->where('complain.complain_id', '=', $billty->complain_id)
+            ->get();
+//        echo "<pre>";
+//        print_r($complainList->fyear);
+//        exit;
+        $transportReceive = DB::table('topland.transport_master')
+            ->where('transport_id', $billty->transport_id)
             ->get()
             ->toArray();
         $transportReceive = json_decode(json_encode($transportReceive), true);
 
-        return view('billty.create')->with('action', 'UPDATE')->with(compact('billty'))->with('clientMaster', $clientMaster)->with('complainList', $complainList)->with('transportReceive', $transportReceive);
+        return view('billty.create')->with('action', 'UPDATE')->with(compact('billty', 'branch_id'))->with('clientMaster', $clientMaster)->with('complainList', $complainList)->with('transportReceive', $transportReceive);
     }
 
     /**
@@ -257,6 +299,7 @@ class BilltyController extends Controller
         $billty->lr_no = $request->input('lr_no');
         $billty->lr_date = date('Y-m-d', strtotime(str_replace('/', '-', $request->input('lr_date'))));
         $billty->entry_by = $request->input('entry_by');
+        $billty->vehicle_no = $request->input('vehicle_no');
         $billty->remark = $request->input('remark');
         $billty->updated_id = Auth::user()->user_id;
         $billty->updated_at = date('Y-m-d H:i:s');
@@ -311,9 +354,10 @@ class BilltyController extends Controller
         $complain_id = \request()->input('complain_id');
         $productList = DB::table('complain_item_details')
             ->select('topland.product_master.product_name', 'complain_item_details.cid_id', 'complain.complain_no',
-                'complain_item_details.serial_no', 'complain_item_details.complain', 'complain_item_details.invoice_no',
-                'complain_item_details.invoice_date', 'complain_item_details.warranty', 'complain_item_details.production_no','complain_item_details.qty as quantity',
-                'complain_item_details.application', 'topland.category_master.category_name','complain.client_name')
+                DB::raw("(select concat(complain_in_word) from multiple_product_complain as p WHERE p.complain_product_id = complain_item_details.cid_id) as complain"),
+                'complain_item_details.serial_no', 'complain_item_details.invoice_no',
+                'complain_item_details.invoice_date', 'complain_item_details.warranty', 'complain_item_details.production_no', 'complain_item_details.qty as quantity',
+                'complain_item_details.application', 'topland.category_master.category_name', 'complain.client_name')
             ->leftJoin('complain', 'complain.complain_id', '=', 'complain_item_details.complain_id')
             ->leftJoin('topland.product_master', 'topland.product_master.product_id', '=', 'complain_item_details.product_id')
             ->leftJoin('topland.category_master', 'topland.category_master.category_id', '=', 'topland.product_master.category_id')

@@ -101,27 +101,11 @@
                     <div class="card-body">
                         <!--begin: Search Form-->
                         <!--begin::Search Form-->
-                        <div class="mb-7">
-                            <div class="row align-items-center">
-                                <div class="col-lg-9 col-xl-8">
-                                    <div class="row align-items-center">
-                                        <div class="col-md-4 my-2 my-md-0">
-                                            <div class="input-icon">
-                                                <input type="text" class="form-control" placeholder="Search..."
-                                                       id="kt_datatable_search_query"/>
-                                                <span>
-																	<i class="flaticon2-search-1 text-muted"></i>
-																</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
                         <!--end::Search Form-->
                         <!--end: Search Form-->
                         <!--begin: Datatable-->
-                        <table class="datatable datatable-bordered datatable-head-custom" id="kt_datatable">
+                        <table id="example" class="display" style="width:100%">
                             <thead>
                             <tr>
                                 <th>Ref No</th>
@@ -132,7 +116,16 @@
                                 <th>District</th>
                                 <th>State</th>
                                 <th>Status</th>
-                                <th>Action</th>
+                                <th>Pro</th>
+                                <th>Acces</th>
+                                <th>Panel</th>
+                                <th>Chang Spr</th>
+                                <th>Test PDF</th>
+                                <th>Insp PDF</th>
+                                <th>Challan PDF</th>
+                                <th>Chang Spr PDF</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -177,57 +170,65 @@
                                                         class="btn btn-success font-weight-bold btn-pill">{{$items->current_status}}</button>
                                                 &nbsp;
                                             @endif
-                                        </a></td>
-
+                                        </a>
+                                    </td>
                                     <td>
                                         <a class="btn btn-sm btn-clean btn-icon btn-icon-md " target="_blank"
                                            title="Add Product"
                                            href="{{url('challan-product-create/'.$items->challan_id)}}">
                                             <i class="fab fa-product-hunt"></i>
                                         </a>
-
+                                    </td>
+                                        <td>
                                         <a class="btn btn-sm btn-clean btn-icon btn-icon-md" target="_blank"
                                            title="Add Accessories"
                                            href="{{url('challan-accessories-create/'.$items->challan_id)}}">
                                             <i class="fab fa-adn"></i>
                                         </a>
-
+                                        </td>
+                                        <td>
                                         <a class="btn btn-sm btn-clean btn-icon btn-icon-md" target="_blank"
                                            title="Add Panel"
                                            href="{{url('challan-panel-create/'.$items->challan_id)}}">
                                             <i class="fas fa-solar-panel"></i>
                                         </a>
-
+                                        </td>
+                                        <td>
                                         <a class="btn btn-sm btn-clean btn-icon btn-icon-md" target="_blank"
                                            title="Change Spare"
                                            href="{{url('change-spare-create/'.$items->challan_id)}}">
                                             <i class="fab fa-stack-exchange"></i>
                                         </a>
-
+                                        </td>
+                                        <td>
                                         <a class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Testing Report"
                                            target="_blank"
                                            href="{{url('engine-testing-report/'.$items->challan_id)}}">
                                             <i class="fas fa-print"></i>
                                         </a>
-
+                                        </td>
+                                        <td>
                                         <a class="btn btn-sm btn-clean btn-icon btn-icon-md" target="_blank"
                                            title="Inspection Report"
                                            href="{{url('challan-inspection-report/'.$items->challan_id)}}">
                                             <i class="flaticon2-printer"></i>
                                         </a>
-
+                                        </td>
+                                        <td>
                                         <a class="btn btn-sm btn-clean btn-icon btn-icon-md" target="_blank"
                                            title="Challan Pdf"
                                            href="{{url('print-fpdf/'.$items->challan_id)}}">
                                             <i class="far fa-file-pdf"></i>
                                         </a>
-
+                                        </td>
+                                        <td>
                                         <a class="btn btn-sm btn-clean btn-icon btn-icon-md" target="_blank"
                                            title="Change Spare Pdf"
                                            href="{{url('change-spare-pdf/'.$items->challan_id)}}">
                                             <i class="fas fa-file-pdf"></i>
                                         </a>
-
+                                        </td>
+                                        <td>
                                         {{--                                        @can('update',$items)--}}
                                         <a class="btn btn-sm btn-clean btn-icon btn-icon-sm" title="Edit"
                                            href="{{ url('challan/'.$items->challan_id.'/edit') }}">
@@ -235,6 +236,8 @@
                                         </a>
 
                                         {{--                                        @endcan--}}
+                                        </td>
+                                        <td>
                                         {{--                                        @can('delete',$items)--}}
                                         <form method="POST" style="display:inline;" title="Delete"
                                               action="{{ route('challan.destroy',$items->challan_id)  }}">
@@ -249,6 +252,7 @@
                                 </tr>
                             @endforeach
                             </tbody>
+
                         </table>
                         <!--end: Datatable-->
                     </div>
@@ -261,7 +265,79 @@
     </div>
 
 @endsection
+@push('styles')
+    <link href="{{asset('assets/css/fixedHeader.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{asset('assets/css/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
+@endpush
 @push('scripts')
+    <script src="{{asset('assets/js/jquery-3.5.1.js')}}"></script>
+    <script src="{{asset('assets/js/jquery.dataTables.min.js')}}"></script>
+    <script src="{{asset('assets/js/dataTables.fixedHeader.min.js')}}"></script>
 
-    <script src="{{asset('metronic/assets/js/pages/crud/ktdatatable/base/html-table.js?v=7.0.4')}}"></script>
+    <script>
+        $(document).ready(function () {
+            // Setup - add a text input to each footer cell
+            $('#example thead tr')
+                .clone(true)
+                .addClass('filters')
+                .appendTo('#example thead');
+
+            var table = $('#example').DataTable({
+                orderCellsTop: false,
+                fixedHeader: true,
+                ordering: false,
+                initComplete: function () {
+                    var api = this.api();
+
+                    // For each column
+                    api
+                        .columns()
+                        .eq(0)
+                        .each(function (colIdx) {
+                            // Set the header cell to contain the input element
+                            var cell = $('.filters th').eq(
+                                $(api.column(colIdx).header()).index()
+                            );
+                            var title = $(cell).text();
+                            $(cell).html('<input type="text" placeholder="' + title + '" />');
+
+                            // On every keypress in this input
+                            $(
+                                'input',
+                                $('.filters th').eq($(api.column(colIdx).header()).index())
+                            )
+                                .off('keyup change')
+                                .on('change', function (e) {
+                                    // Get the search value
+                                    $(this).attr('title', $(this).val());
+                                    var regexr = '({search})'; //$(this).parents('th').find('select').val();
+
+                                    var cursorPosition = this.selectionStart;
+                                    // Search the column for that value
+                                    api
+                                        .column(colIdx)
+                                        .search(
+                                            this.value != ''
+                                                ? regexr.replace('{search}', '(((' + this.value + ')))')
+                                                : '',
+                                            this.value != '',
+                                            this.value == ''
+                                        )
+                                        .draw();
+                                })
+                                .on('keyup', function (e) {
+                                    e.stopPropagation();
+
+                                    $(this).trigger('change');
+                                    $(this)
+                                        .focus()[0]
+                                        .setSelectionRange(cursorPosition, cursorPosition);
+                                });
+                        });
+                },
+            });
+        });
+    </script>
+
+{{--    <script src="{{asset('metronic/assets/js/pages/crud/ktdatatable/base/html-table.js?v=7.0.4')}}"></script>--}}
 @endpush

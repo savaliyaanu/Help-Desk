@@ -16,7 +16,7 @@ class DeliveryProductInwardController extends Controller
     public function index($delivery_challan_out_id)
     {
         $product_list = DB::table('delivery_challan_out_product')
-            ->select('delivery_challan_out_product.*', 'topland.product_master.product_name')
+            ->select('delivery_challan_out_product.*', 'topland.product_master.product_name','challan_item_master.challan_product_id')
             ->join('challan_item_master', 'challan_item_master.challan_product_id', '=', 'delivery_challan_out_product.challan_product_id')
             ->join('topland.product_master', 'topland.product_master.product_id', '=', 'challan_item_master.product_id')
             ->where('delivery_challan_out_id', '=', $delivery_challan_out_id)
@@ -49,25 +49,21 @@ class DeliveryProductInwardController extends Controller
      */
     public function store(Request $request)
     {
-        $delivery_challan_out_id = $request->input('delivery_challan_out_id');
-//print_r($delivery_challan_out_id);exit();
-//        if (!empty($request->input('product_id'))) {
-//            foreach ($request->input('product_id') as $row) {
-                $product = DeliveryChallanOutProduct::find($delivery_challan_out_id);
-                $product->is_inward = 'Y';
-//                $product->qty =$request->input('qty');
-//                $product->serial_no =$request->input('serial_no');
-                $product->inward_date = date('Y-m-d', strtotime(str_replace('/', '-', $request->input('inward_date-'))));
-                $product->save();
-                $request->session()->flash('create-status', 'Product  Inward Successfully Added..');
-//            }
-//        }
-        $delivery_status = DeliveryChallanOutProduct::where('delivery_challan_out_id', $delivery_challan_out_id)->where('is_inward', '=', 'N')->first();
+        $challan_product_ic = $request->input('product_id');
+        $delivery_challan_out_id=$request->input('delivery_challan_out_id');
+            DB::table('delivery_challan_out_product')
+                ->where('challan_product_id', '=', $challan_product_ic)
+                ->update(['is_inward' => 'Y', 'inward_date' => date('Y-m-d', strtotime(str_replace('/', '-', $request->input('inward_date'))))]);
+
+        $delivery_status = DB::table('delivery_challan_out_product')
+            ->where('delivery_challan_out_id', $delivery_challan_out_id)->where('is_inward', '=', 'N')->first();
+
         if (!empty($delivery_status)) {
             DB::table('delivery_challan_out')->where('delivery_challan_out_id', '=', $delivery_challan_out_id)->update(['status' => 'Pending']);
         } else {
             DB::table('delivery_challan_out')->where('delivery_challan_out_id', '=', $delivery_challan_out_id)->update(['status' => 'Inward']);
         }
+        $request->session()->flash('create-status', 'Product Inward Successfully Added..');
 
         return redirect('delivery-product-inward/' . $delivery_challan_out_id);
     }
@@ -114,7 +110,8 @@ class DeliveryProductInwardController extends Controller
      */
     public function destroy($id, Request $request)
     {
-        $delivery_challan = DeliveryChallanOutProduct::first();
+        $delivery_challan = DeliveryChallanOutProduct::find($id);
+
         $delete = DeliveryChallanOutProduct::find($id);
         foreach ($delete as $row) {
             if ($row == 'Y') {
@@ -127,7 +124,7 @@ class DeliveryProductInwardController extends Controller
             }
             $product->save();
         }
-        $request->session()->flash('delete-status', 'Product  Inward Successfully Removed..');
+        $request->session()->flash('delete-status', 'Product Inward Successfully Removed..');
         return redirect('delivery-product-inward/' . $delivery_challan->delivery_challan_out_id);
     }
 }

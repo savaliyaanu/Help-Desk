@@ -9,7 +9,8 @@
                     <!--begin::Page Heading-->
                     <div class="d-flex align-items-baseline mr-5">
                         <!--begin::Page Title-->
-                        <h3 class="subheader-title text-dark font-weight-bold my-2 mr-3">Delivery Challan Product Inward </h3>
+                        <h3 class="subheader-title text-dark font-weight-bold my-2 mr-3">Delivery Challan Product
+                            Inward </h3>
                         <!--end::Page Title-->
                     </div>
                     <!--end::Page Heading-->
@@ -66,8 +67,8 @@
                             </button>
                         </div>
                     </div>
-            @endif
-            <!--begin::Card-->
+                @endif
+                <!--begin::Card-->
                 <div class="row">
                     <div class="col-lg-12">
                         <!--begin::Card-->
@@ -86,20 +87,42 @@
                                         <input type="hidden" name="delivery_challan_out_id"
                                                placeholder="delivery_challan_out_id"
                                                value="{{$delivery_challan_out_id}}"
-                                               class="form-control "/>
+                                               class="form-control"/>
                                         <label class="col-form-label text-right col-lg-2">Product Name <span
                                                 class="text-danger">*</span></label>
                                         <div class="col-lg-4">
                                             <select class="form-control kt_select2_5" id="product_id"
-                                                    name="product_id[]" multiple="multiple">
-                                                <option value="">Select Product Name</option>
+                                                    name="product_id">
+                                                <option>Select Product Name</option>
                                                 @foreach($product_list as $key=>$value)
-                                                    <option value="{{$value->delivery_challan_product_id}}">{{$value->product_name}}</option>
+                                                    <option
+                                                        value="{{$value->challan_product_id}}">{{$value->product_name}}</option>
                                                 @endforeach
                                             </select>
-                                            <?php if(!empty($delivery_challan_out->product_id)){ ?>
+                                            <?php if (!empty($delivery_challan_out->product_id)){ ?>
                                             <script>document.getElementById("product_id").value = '{{ $delivery_challan_out->product_id }}';</script>
                                             <?php } ?>
+                                        </div>
+
+                                        <label class="col-form-label text-right col-lg-0">Inward Dt.<span
+                                                class="text-danger">*</span></label>
+                                        <div class="col-lg-4">
+                                            <div class="input-group date">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="la la-calendar"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text"
+                                                       class="form-control {{ $errors->has('inward_date') ? ' is-invalid' : '' }}"
+                                                       name="inward_date" placeholder="Select Date" id="kt_datepicker_3"
+                                                       value="{{ ((!empty($billty->inward_date)) ?$billty->inward_date :old('inward_date')) }}"/>
+                                                @if ($errors->has('inward_date'))
+                                                    <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $errors->first('inward_date') }}</strong>
+                                                </span>
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -172,6 +195,7 @@
                             <tr>
                                 <th class="text-center">Sr</th>
                                 <th class="text-center">Product Name</th>
+                                <th class="text-center">Inward Dt</th>
                                 <th class="text-center">Status</th>
                                 <th class="text-center">Action</th>
                             </tr>
@@ -179,11 +203,12 @@
                             <tbody>
                             <?php
                             $i = 1;
-                            foreach ($list as $key=>$value){
-                            ?>
+                            foreach ($list as $key => $value){
+                                ?>
                             <tr>
                                 <td class="text-center">{{ $i++ }}</td>
                                 <td class="text-center">{{ $value->product_name }}</td>
+                                <td class="text-center">{{ date('d-m-Y',strtotime($value->inward_date)) }}</td>
                                 <td class="text-center">{{ $value->is_inward }}</td>
                                 <td class="text-center">
                                     <form method="POST" style="display:inline;"
@@ -213,4 +238,5 @@
     <script src="{{asset('metronic/assets/js/pages/crud/forms/validation/form-controls.js?v=7.0.4')}}"></script>
     <script src="{{asset('metronic/assets/js/pages/crud/ktdatatable/base/html-table.js?v=7.0.4')}}"></script>
     <script src="{{ asset('metronic/assets/js/pages/crud/forms/widgets/select2.js?v=7.0.4')}}"></script>
+    <script src="{{asset('metronic/assets/js/pages/crud/forms/widgets/bootstrap-datepicker.js?v=7.0.4')}}"></script>
 @endpush

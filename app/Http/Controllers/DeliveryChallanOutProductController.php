@@ -31,8 +31,7 @@ WHERE delivery_challan_out.delivery_challan_out_id = $delivery_challan_out_id
   AND challan_item_master.is_delivery_challan = 'N'
   AND delivery_challan_out.branch_id = $branch_id");
 
-//echo "<pre>";
-//print_r($challan_product);exit;
+
         $list = DB::table('delivery_challan_out_product')
             ->select('topland.product_master.product_name', 'delivery_challan_out_product.delivery_challan_product_id', 'challan_item_master.serial_no', 'delivery_challan_out_product.qty')
             ->join('challan_item_master', 'challan_item_master.challan_product_id', '=', 'delivery_challan_out_product.challan_product_id')
@@ -41,6 +40,7 @@ WHERE delivery_challan_out.delivery_challan_out_id = $delivery_challan_out_id
             ->where('delivery_challan_out_id', '=', $delivery_challan_out_id)
             ->where('delivery_challan_out_product.branch_id', '=', Auth::user()->branch_id)
             ->get();
+
         return view('deliverychallan.product')->with('action', 'INSERT')->with(compact('list', 'delivery_challan_out_id', 'challan_product'));
     }
 
@@ -124,17 +124,18 @@ WHERE delivery_challan_out.delivery_challan_out_id = $delivery_challan_out_id
      */
     public function destroy($id, Request $request)
     {
-        $delivery_challan_out_id = $request->session()->get('delivery_challan_out_id');
+        $delivery_challan_out_id = DB::table('delivery_challan_out_product')->select('delivery_challan_out_id','challan_product_id')->where('delivery_challan_product_id','=',$id)->first();
         DeliveryChallanOutProduct::destroy($id);
+        DB::table('challan_item_master')->where('challan_product_id','=',$delivery_challan_out_id->challan_product_id)->update(['is_delivery_challan'=>'N']);
         $request->session()->flash('delete-status', 'Product Successfully Removed..');
-        return redirect('delivery-challan-product/' . $delivery_challan_out_id);
+        return redirect('delivery-challan-product/' . $delivery_challan_out_id->delivery_challan_out_id);
     }
 
     public function getChallanProudct($delivery_challan_out_id, Request $request)
     {
         $challan_detail = DB::table('delivery_challan_out')->select('challan_id')->where('delivery_challan_out_id', '=', $delivery_challan_out_id)->first();
         $challan_id = explode(',', $challan_detail->challan_id);
-//        DB::enableQueryLog();
+
         $challan_product = DB::table('delivery_challan_out')
             ->select('challan_item_master.challan_product_id', 'topland.product_master.product_name', 'challan_item_master.serial_no')
             ->join('challan_item_master', 'challan_item_master.challan_id', '=', 'delivery_challan_out.challan_id')
@@ -142,16 +143,12 @@ WHERE delivery_challan_out.delivery_challan_out_id = $delivery_challan_out_id
             ->join('topland.product_master', 'topland.product_master.product_id', '=', 'complain_item_details.product_id');
         foreach ($challan_id as $row) {
             $query = $challan_product->where('challan_item_master.challan_id', '=', $row);
-//            print_r($challan_product);
             $query->get();
-//            exit();
         }
         $query->get();
-//        dd(DB::getQueryLog());
         echo "<pre>";
-        print_r($query);
-        exit();
-////            ->where('challan_item_master.challan_id', '=', $challan_id)
+        print_r($query);exit();
+//            ->where('challan_item_master.challan_id', '=', $challan_id)
 //        ->whereNOTIn('challan_product_id', function ($query) {
 //            $query->select('challan_product_id')->from('delivery_challan_out_product');
 //        })
@@ -159,4 +156,5 @@ WHERE delivery_challan_out.delivery_challan_out_id = $delivery_challan_out_id
 //        echo "<pre>";
 
     }
+
 }

@@ -117,7 +117,7 @@ class ChallanReportController extends Controller
         $query->where(DB::raw('DATE_FORMAT(challan.created_at,"%Y-%m-%d")'), '<=', $to);
 
         if ($report_type == 'Pending') {
-            $query->where('challan.dispatch_status', '=', 'N');
+            $query->where('challan.current_status', '=', 'Repairing');
         }
         $challan = $query->get();
 

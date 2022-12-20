@@ -146,7 +146,9 @@ class AdvanceReplacementController extends Controller
     public function edit(AdvanceReplacement $advanceReplacement)
     {
         $companyItem = $advanceReplacement;
-        $complain = DB::table('complain')->where('branch_id', '=', Auth::user()->branch_id)->get();
+        $complain = DB::table('complain')
+            ->select(DB::raw("(select CONCAT(RIGHT (YEAR(date_from), 2),'-',RIGHT (YEAR(date_to), 2))from financial_year as p WHERE p.financial_id = complain.financial_id) as fyear"),'complain.*')
+            ->where('branch_id', '=', Auth::user()->branch_id)->get();
         $spare_list = DB::table('topland.product_master')
             ->where('category_id', '=', '9')
             ->where('is_delete', '=', 'N')
@@ -154,7 +156,6 @@ class AdvanceReplacementController extends Controller
         $financial_year = DB::table('topland.financial_year')->where('is_delete', 'N')->orderBy('financial_id', 'DESC')->get();
         $transport_list = Transport::get();
         return view('advancereplacement.create')->with('action', 'UPDATE')->with(compact('companyItem', 'complain', 'spare_list', 'financial_year', 'transport_list'));
-
     }
 
     /**

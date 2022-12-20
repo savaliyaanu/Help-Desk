@@ -95,41 +95,8 @@
                 @endif
                 <div class="card card-custom">
                     <div class="card-body">
-                        <div class="mb-7">
-                            <div class="row align-items-center">
-                                <div class="col-lg-9 col-xl-8">
-                                    <div class="row align-items-center">
-                                        <div class="col-md-4 my-2 my-md-0">
-                                            <div class="input-icon">
-                                                <input type="text" class="form-control" placeholder="Search..."
-                                                       id="kt_datatable_search_query"/>
-                                                <span>
-																	<i class="flaticon2-search-1 text-muted"></i>
-																</span>
-                                            </div>
 
-                                        </div>
-                                        <div class="col-md-4 my-2 my-md-0">
-                                            <div class="d-flex align-items-center">
-                                                <label class="mr-3 mb-0 d-none d-md-block">Status:</label>
-                                                <select class="form-control" id="kt_datatable_search_status">
-                                                    <option value="">All</option>
-                                                    <option value="Solve" class=" kt-badge--warning">Solve</option>
-                                                    <option value="Send To Service Station" class=" kt-badge--success">
-                                                        Send To Service Station
-                                                    </option>
-                                                    {{--                                                    <option value="3">Canceled</option>--}}
-                                                    {{--                                                    <option value="4">Success</option>--}}
-                                                    {{--                                                    <option value="5">Info</option>--}}
-                                                    {{--                                                    <option value="6">Danger</option>--}}
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <table class="datatable datatable-bordered datatable-head-custom" id="kt_datatable">
+                        <table id="example" class="display" style="width:100%">
                             <thead>
                             <tr>
                                 <th>Report No</th>
@@ -140,7 +107,13 @@
                                 <th>City Name</th>
                                 <th>Party Name</th>
                                 <th>Status</th>
-                                <th>Action</th>
+                                <th>Inspection Report</th>
+                                <th>Callback Reason Form</th>
+                                <th>Expense Product Form</th>
+                                <th>Expense Report</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                                <th>Spare Report</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -161,35 +134,46 @@
                                         <td>{{$items->state_name}}</td>
                                         <td>{{$items->city_name}}</td>
                                         <td>{{$items->party_name}}</td>
-                                        <td>{{$items->status}}</td>
+                                        <td>{{$items->status}}
+                                        </td>
                                         <td>
                                             <a class="btn btn-sm btn-clean btn-icon btn-icon-md" target="_blank"
                                                title="Inspection Report"
                                                href="{{url('expense-spare-report/'.$items->expense_id)}}">
                                                 <i class="flaticon2-printer"></i>
                                             </a>
+                                        </td>
+                                        <td>
                                             <a class="btn btn-sm btn-clean btn-icon btn-icon-md"
                                                title="Callback Reason Form"
                                                href="{{url('callback-reason/'.$items->expense_id)}}">
                                                 <i class="flaticon-doc"></i>
                                             </a>
+                                        </td>
+                                        <td>
                                             <a class="btn btn-sm btn-clean btn-icon btn-icon-md"
                                                title="Service Expense Product Form"
                                                href="{{url('expense-product-in-image/'.$items->expense_id)}}">
                                                 <i class="flaticon2-checking"></i>
                                             </a>
+                                        </td>
+                                        <td>
                                             <a class="btn btn-sm btn-clean btn-icon btn-icon-md"
                                                title="Service Expense Report Pdf" target="_blank"
                                                href="{{url('service-report/'.$items->expense_id)}}">
                                                 <i class="far fa-file-pdf"></i>
                                             </a>
+                                        </td>
+                                        <td>
 
                                                 <?php if (Gate::allows('service-expense-policy', 1)) { ?>
                                             <a class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit"
                                                href="{{ url('service-expense/'.$items->expense_id.'/edit') }}">
                                                 <i class="flaticon2-pen"></i>
                                             </a>
-                                            <?php } ?>
+                                            <?php } ?> </td>
+                                        <td>
+
                                                 <?php if (Gate::allows('service-expense-policy', 1)) { ?>
                                             <form method="POST" style="display:inline;" title="Delete"
                                                   action="{{ route('service-expense.destroy',$items->expense_id)  }}">
@@ -201,6 +185,9 @@
                                                 </button>
                                             </form>
                                             <?php } ?>
+                                        </td>
+                                        <td>
+
                                             <a class="btn btn-sm btn-clean btn-icon btn-icon-md"
                                                title="Spare Report Pdf" target="_blank"
                                                href="{{url('service-spare-report/'.$items->expense_id)}}">
@@ -222,6 +209,78 @@
         <!--end::Entry-->
     </div>
 @endsection
+@push('styles')
+    <link href="{{asset('assets/css/fixedHeader.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{asset('assets/css/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
+@endpush
 @push('scripts')
-    <script src="{{asset('metronic/assets/js/pages/crud/ktdatatable/base/html-table.js?v=7.0.4')}}"></script>
+    <script src="{{asset('assets/js/jquery-3.5.1.js')}}"></script>
+    <script src="{{asset('assets/js/jquery.dataTables.min.js')}}"></script>
+    <script src="{{asset('assets/js/dataTables.fixedHeader.min.js')}}"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Setup - add a text input to each footer cell
+            $('#example thead tr')
+                .clone(true)
+                .addClass('filters')
+                .appendTo('#example thead');
+
+            var table = $('#example').DataTable({
+                orderCellsTop: false,
+                fixedHeader: true,
+                ordering: false,
+                initComplete: function () {
+                    var api = this.api();
+
+                    // For each column
+                    api
+                        .columns()
+                        .eq(0)
+                        .each(function (colIdx) {
+                            // Set the header cell to contain the input element
+                            var cell = $('.filters th').eq(
+                                $(api.column(colIdx).header()).index()
+                            );
+                            var title = $(cell).text();
+                            $(cell).html('<input type="text" placeholder="' + title + '" />');
+
+                            // On every keypress in this input
+                            $(
+                                'input',
+                                $('.filters th').eq($(api.column(colIdx).header()).index())
+                            )
+                                .off('keyup change')
+                                .on('change', function (e) {
+                                    // Get the search value
+                                    $(this).attr('title', $(this).val());
+                                    var regexr = '({search})'; //$(this).parents('th').find('select').val();
+
+                                    var cursorPosition = this.selectionStart;
+                                    // Search the column for that value
+                                    api
+                                        .column(colIdx)
+                                        .search(
+                                            this.value != ''
+                                                ? regexr.replace('{search}', '(((' + this.value + ')))')
+                                                : '',
+                                            this.value != '',
+                                            this.value == ''
+                                        )
+                                        .draw();
+                                })
+                                .on('keyup', function (e) {
+                                    e.stopPropagation();
+
+                                    $(this).trigger('change');
+                                    $(this)
+                                        .focus()[0]
+                                        .setSelectionRange(cursorPosition, cursorPosition);
+                                });
+                        });
+                },
+            });
+        });
+    </script>
+{{--    <script src="{{asset('metronic/assets/js/pages/crud/ktdatatable/base/html-table.js?v=7.0.4')}}"></script>--}}
 @endpush

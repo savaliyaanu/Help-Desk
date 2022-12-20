@@ -31,7 +31,7 @@
                                                        value="{{$billty->complain_id}}">
                                             @endif
                                             <select type="text"
-                                                    class="form-control kt_select2_5 multiple-complain {{ $errors->has('complain_id') ? ' is-invalid' : '' }}"
+                                                    class="form-control kt_select2_5 multiple-complain {{ $errors->has('complain_id') ? 'is-invalid' : '' }}"
                                                     id="complain_id"
                                                     name="complain_id[]" required multiple
                                                     style="" {{ !empty($billty->complain_id)?'disabled':''}}>
@@ -39,13 +39,15 @@
                                                 @foreach ($complainList as $key=>$row)
                                                     @if($row->branch_id == 1)
                                                         <?php  $complains_no = 'PF-TKT/' . $row->fyear . '/' . $row->complain_no;?>
-                                                    @elseif($row->branch_id == 3)
+                                                    @endif
+                                                    @if($row->branch_id == 3)
                                                         <?php $complains_no = 'TE-TKT/' . $row->fyear . '/' . $row->complain_no;?>
-                                                    @elseif($row->branch_id == 4)
+                                                    @endif
+                                                    @if($row->branch_id == 4)
                                                         <?php  $complains_no = 'TP-TKT/' . $row->fyear . '/' . $row->complain_no;?>
                                                     @endif
                                                     <option
-                                                        value="{{$row->complain_id}}">{{$complains_no.' - '.$row->client_name}}</option>
+                                                            value="{{$row->complain_id}}">{{$complains_no.' - '.$row->client_name}}</option>
                                                 @endforeach
                                             </select>
                                             <?php if(!empty($billty->complain_id)){ ?>
@@ -65,23 +67,23 @@
                                                     onchange="showOther(this.value)">
                                                 <option value="">Select Type</option>
                                                 <option
-                                                    value="Billty" {{ !empty($billty->challan_type) && $billty->challan_type=='Billty' ? 'selected':''}} {{ ((old('challan_type')=='Billty')?'selected': '') }}>
+                                                        value="Billty" {{ !empty($billty->challan_type) && $billty->challan_type=='Billty' ? 'selected':''}} {{ ((old('challan_type')=='Billty')?'selected': '') }}>
                                                     Billty
                                                 </option>
                                                 <option
-                                                    value="Letter Pad" {{!empty($billty->challan_type) && $billty->challan_type=='Letter Pad' ? 'selected':''}} {{ ((old('challan_type')=='Letter Pad')?'selected': '')}}>
+                                                        value="Letter Pad" {{!empty($billty->challan_type) && $billty->challan_type=='Letter Pad' ? 'selected':''}} {{ ((old('challan_type')=='Letter Pad')?'selected': '')}}>
                                                     Letter Pad
                                                 </option>
                                                 <option
-                                                    value="Challan" {{!empty($billty->challan_type) && $billty->challan_type=='Challan' ? 'selected':''}} {{ ((old('challan_type')=='Challan')?'selected': '')}}>
+                                                        value="Challan" {{!empty($billty->challan_type) && $billty->challan_type=='Challan' ? 'selected':''}} {{ ((old('challan_type')=='Challan')?'selected': '')}}>
                                                     Challan
                                                 </option>
                                                 <option
-                                                    value="Letter" {{ !empty($billty->challan_type) && $billty->challan_type=='Letter' ? 'selected':''}} {{ ((old('challan_type')=='Letter')?'selected': '') }}>
+                                                        value="Letter" {{ !empty($billty->challan_type) && $billty->challan_type=='Letter' ? 'selected':''}} {{ ((old('challan_type')=='Letter')?'selected': '') }}>
                                                     Letter
                                                 </option>
                                                 <option
-                                                    value="Other" {{ !empty($billty->challan_type) && $billty->challan_type=='Other' ? 'selected':''}} {{ ((old('challan_type')=='Other')?'selected': '') }}>
+                                                        value="Other" {{ !empty($billty->challan_type) && $billty->challan_type=='Other' ? 'selected':''}} {{ ((old('challan_type')=='Other')?'selected': '') }}>
                                                     Other
                                                 </option>
                                             </select>
@@ -110,13 +112,14 @@
                                             <div class="input-group">
                                                 <select style="width: 100%" id="transport_id" data-size="7"
                                                         data-live-search="true"
+                                                        onchange="showVehicleNum(this.value)"
                                                         class="form-control transport-select2 transport_id selectpicker {{ $errors->has('transport_id') ? ' is-invalid' : '' }}"
                                                         name="transport_id" required
                                                         data-live-search="true">
                                                     <option value="">Select Transport Name</option>
                                                     @foreach($transportReceive as $key=>$item)
                                                         <option
-                                                            value="{{ $item['transport_id'] }}">{{ $item['transport_name'] }}</option>
+                                                                value="{{ $item['transport_id'] }}">{{ $item['transport_name'] }}</option>
                                                     @endforeach
                                                 </select>
                                                 <?php if(!empty($billty->transport_id)){ ?>
@@ -127,6 +130,17 @@
                                         <strong>{{ $errors->first('transport_id') }}</strong>
                                     </span>
                                                 @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row" id="vehicleNumber" style="display: none">
+                                        <label class="col-form-label text-right col-lg-3 col-sm-12">Vehicle No
+                                            <span class="text-danger">*</span></label>
+                                        <div class="col-lg-9 col-md-9 col-sm-12">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="vehicle_no" id="vehicle_no" required
+                                                       placeholder="Enter value"
+                                                       value="{{ ((!empty($billty->vehicle_no)) ?$billty->vehicle_no :old('vehicle_no'))}}"/>
                                             </div>
                                         </div>
                                     </div>
@@ -142,11 +156,11 @@
                                                         title="Select Transport Charges By">
                                                     <option value="">Select</option>
                                                     <option
-                                                        value="Company"{{ !empty($billty->freight_rs_by) && $billty->freight_rs_by=='Company' ? 'selected':''}} {{ ((old('freight_rs_by')=='Company')?'selected': '') }}>
+                                                            value="Company"{{ !empty($billty->freight_rs_by) && $billty->freight_rs_by=='Company' ? 'selected':''}} {{ ((old('freight_rs_by')=='Company')?'selected': '') }}>
                                                         COMPANY
                                                     </option>
                                                     <option
-                                                        value="party"{{ !empty($billty->freight_rs_by) && $billty->freight_rs_by=='party' ? 'selected':''}} {{ ((old('freight_rs_by')=='party')?'selected': '') }}>
+                                                            value="party"{{ !empty($billty->freight_rs_by) && $billty->freight_rs_by=='party' ? 'selected':''}} {{ ((old('freight_rs_by')=='party')?'selected': '') }}>
                                                         PARTY
                                                     </option>
                                                 </select>
@@ -163,7 +177,7 @@
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <span
-                                                        class="input-group-text">
+                                                            class="input-group-text">
                                                         <i class="la la-sort-numeric-asc"></i>
                                                     </span>
                                                 </div>
@@ -182,7 +196,7 @@
                                     </div>
                                     <div class="form-group row ">
                                         <label class="col-form-label text-right col-lg-3 col-sm-12">LR.NO. <span
-                                                class="text-danger">*</span></label>
+                                                    class="text-danger">*</span></label>
                                         <div class="col-lg-9 col-md-9 col-sm-12">
                                             <div class="input-group">
                                                 <input type="text"
@@ -197,7 +211,7 @@
                                                 @endif
                                                 <div class="input-group-prepend">
                                                     <span
-                                                        class="input-group-text">
+                                                            class="input-group-text">
                                                         <i class="la la-sort-numeric-asc"></i>
                                                     </span>
                                                 </div>
@@ -206,7 +220,7 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-form-label text-right col-lg-3 col-sm-12">LR. Date <span
-                                                class="text-danger">*</span></label>
+                                                    class="text-danger">*</span></label>
                                         <div class="col-lg-9 col-md-9 col-sm-12">
                                             <div class="input-group date">
                                                 <div class="input-group-append">
@@ -228,7 +242,7 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-form-label text-right col-lg-3 col-sm-12">Entry BY<span
-                                                class="text-danger">*</span></label>
+                                                    class="text-danger">*</span></label>
                                         <div class="col-lg-9 col-md-9 col-sm-12">
                                             <div class="input-group">
                                                 <input type="text"
@@ -245,14 +259,14 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-form-label text-right col-lg-3 col-sm-12">Remark <span
-                                                class="text-danger">*</span></label>
+                                                    class="text-danger">*</span></label>
                                         <div class="col-lg-9 col-md-9 col-sm-12">
                                             <textarea class="form-control" name="remark" placeholder="Enter a Remark"
                                                       rows="3">{{ ((!empty($billty->remark)) ?$billty->remark :old('remark')) }}</textarea>
                                         </div>
                                     </div>
                                 </div>
-                                    @if($action!='UPDATE')
+                                @if($action!='UPDATE')
                                     <table class="datatable table">
                                         <thead class="thead-light">
                                         <tr>
@@ -394,6 +408,18 @@
         showOther('<?php echo $billty->challan_type; ?>');
         <?php } ?>
 
+        function showVehicleNum(value) {
+            if (value == 46) {
+                $("#vehicleNumber").show();
+            } else {
+                $("#vehicleNumber").hide();
+                $("#vehicle_no").val(value);
+            }
+        }
+
+        <?php if(!empty($billty->transport_id)){ ?>
+        showVehicleNum('<?php echo $billty->transport_id; ?>');
+        <?php } ?>
 
         $(".customer-select2").select2({
             placeholder: "Select a Client Name",
@@ -445,9 +471,15 @@
 
         function getComplainProductDetail(id) {
             var select = document.getElementById('complain_id');
-            var selected = [...select.options]
-                .filter(option => option.selected)
-                .map(option => option.value);
+            var selected = [...select.options
+        ]
+        .
+            filter(option = > option.selected
+        )
+        .
+            map(option = > option.value
+        )
+            ;
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

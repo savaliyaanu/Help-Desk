@@ -2442,12 +2442,12 @@ pre code {
 }
 
 .table-bordered {
-    border: 1px solid #ECF0F3;
+    border: 1px solid #464e5f;
 }
 
 .table-bordered th,
 .table-bordered td {
-    border: 1px solid #ECF0F3;
+    border: 1px solid #464e5f;
 }
 
 .table-bordered thead th,

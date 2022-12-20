@@ -85,6 +85,7 @@ WHERE invoice_id = $invoice_id");
                 $invoiceItems->invoice_id = $request->input('invoice_id');
                 $invoiceItems->product_id = $complainItem->product_id;
                 $invoiceItems->category_id = $complainItem->category_id;
+                $invoiceItems->pro_qty = $request->input('pro_qty');
                 $invoiceItems->challan_product_id = $row;
                 $invoiceItems->type = 'Product';
                 $invoiceItems->created_id = Auth::user()->user_id;

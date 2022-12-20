@@ -138,6 +138,12 @@ class InspectionReportController extends Controller
         $inspection_report->componentsD3 = $request->input('componentsD3');
         $inspection_report->componentsD4 = $request->input('componentsD4');
         $inspection_report->componentsD5 = $request->input('componentsD5');
+        $inspection_report->componentsE2 = $request->input('componentsE');
+        $inspection_report->componentsE3 = $request->input('componentsE3');
+        $inspection_report->componentsF2 = $request->input('componentsF2');
+        $inspection_report->componentsF3 = $request->input('componentsF3');
+        $inspection_report->componentsF4 = $request->input('componentsF4');
+        $inspection_report->componentsF5 = $request->input('componentsF5');
         $inspection_report->company_observation = $request->input('company_observation');
         $inspection_report->checked_by = $request->input('checked_by');
         $inspection_report->fault = $request->input('fault');

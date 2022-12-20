@@ -565,19 +565,11 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <div class="col-3 col-form-label">
-                                                <!--begin::Input-->
-                                                <div class="form-group">
-                                                    <label></label>
-                                                    <input type="text" id="componentsA1" placeholder="Enter Component"
-                                                           class="form-control " name="componentsA1"
-                                                           value="{{ ((!empty($inspection_report->componentsA1)) ?$inspection_report->componentsA1 :old('componentsA1')) }}"/>
-                                                </div>
-                                            </div>
+                                            <label class="col-3 col-form-label ">FUEL PUMP LEAVER</label>
                                             <div class="col-xl-2">
                                                 <!--begin::Input-->
                                                 <div class="form-group">
-                                                    <label></label>
+                                                    <label>VISUAL</label>
                                                     <input type="text" id="componentsA2" placeholder="Enter Value"
                                                            class="form-control " name="componentsA2"
                                                            value="{{ ((!empty($inspection_report->componentsA2)) ?$inspection_report->componentsA2 :old('componentsA2')) }}"/>
@@ -586,7 +578,7 @@
                                             <div class="col-xl-2">
                                                 <!--begin::Input-->
                                                 <div class="form-group">
-                                                    <label></label>
+                                                    <label>INTER DIA</label>
                                                     <input type="text" id="componentsA3" placeholder="Enter Value"
                                                            class="form-control " name="componentsA3"
                                                            value="{{ ((!empty($inspection_report->componentsA3)) ?$inspection_report->componentsA3 :old('componentsA3')) }}"/>
@@ -595,7 +587,7 @@
                                             <div class="col-xl-2">
                                                 <!--begin::Input-->
                                                 <div class="form-group">
-                                                    <label></label>
+                                                    <label>HARDNESS</label>
                                                     <input type="text" id="componentsA4" placeholder="Enter Value"
                                                            class="form-control " name="componentsA4"
                                                            value="{{ ((!empty($inspection_report->componentsA4)) ?$inspection_report->componentsA4 :old('componentsA4')) }}"/>
@@ -604,7 +596,7 @@
                                             <div class="col-xl-2">
                                                 <!--begin::Input-->
                                                 <div class="form-group">
-                                                    <label></label>
+                                                    <label>PLAY</label>
                                                     <input type="text" id="componentsA5" placeholder="Enter Value"
                                                            class="form-control " name="componentsA5"
                                                            value="{{ ((!empty($inspection_report->componentsA5)) ?$inspection_report->componentsA5 :old('componentsA5')) }}"/>
@@ -612,19 +604,11 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <div class="col-3 col-form-label">
-                                                <!--begin::Input-->
-                                                <div class="form-group">
-                                                    <label></label>
-                                                    <input type="text" id="componentsB1" placeholder="Enter Component"
-                                                           class="form-control " name="componentsB1"
-                                                           value="{{ ((!empty($inspection_report->componentsB1)) ?$inspection_report->componentsB1 :old('componentsB1')) }}"/>
-                                                </div>
-                                            </div>
+                                                    <label class="col-3 col-form-label ">IDEL GEAR</label>
                                             <div class="col-xl-2">
                                                 <!--begin::Input-->
                                                 <div class="form-group">
-                                                    <label></label>
+                                                    <label>VISUAL</label>
                                                     <input type="text" id="componentsB2" placeholder="Enter Value"
                                                            class="form-control " name="componentsB2"
                                                            value="{{ ((!empty($inspection_report->componentsB2)) ?$inspection_report->componentsB2 :old('componentsB2')) }}"/>
@@ -633,45 +617,19 @@
                                             <div class="col-xl-2">
                                                 <!--begin::Input-->
                                                 <div class="form-group">
-                                                    <label></label>
+                                                    <label>OUTER DIA</label>
                                                     <input type="text" id="componentsB3" placeholder="Enter Value"
                                                            class="form-control " name="componentsB3"
                                                            value="{{ ((!empty($inspection_report->componentsB3)) ?$inspection_report->componentsB3 :old('componentsB3')) }}"/>
                                                 </div>
                                             </div>
-                                            <div class="col-xl-2">
-                                                <!--begin::Input-->
-                                                <div class="form-group">
-                                                    <label></label>
-                                                    <input type="text" id="componentsB4" placeholder="Enter Value"
-                                                           class="form-control " name="componentsB4"
-                                                           value="{{ ((!empty($inspection_report->componentsB4)) ?$inspection_report->componentsB4 :old('componentsB4')) }}"/>
-                                                </div>
-                                            </div>
-                                            <div class="col-xl-2">
-                                                <!--begin::Input-->
-                                                <div class="form-group">
-                                                    <label></label>
-                                                    <input type="text" id="componentsB5" placeholder="Enter Value"
-                                                           class="form-control " name="componentsB5"
-                                                           value="{{ ((!empty($inspection_report->componentsB5)) ?$inspection_report->componentsB5 :old('componentsB5')) }}"/>
-                                                </div>
-                                            </div>
                                         </div>
                                         <div class="form-group row">
-                                            <div class="col-3 col-form-label">
-                                                <!--begin::Input-->
-                                                <div class="form-group">
-                                                    <label></label>
-                                                    <input type="text" id="componentsC1" placeholder="Enter Component"
-                                                           class="form-control " name="componentsC1"
-                                                           value="{{ ((!empty($inspection_report->componentsC1)) ?$inspection_report->componentsC1 :old('componentsC1')) }}"/>
-                                                </div>
-                                            </div>
+                                                    <label class="col-3 col-form-label ">VALVE TAPPET</label>
                                             <div class="col-xl-2">
                                                 <!--begin::Input-->
                                                 <div class="form-group">
-                                                    <label></label>
+                                                    <label>VISUAL</label>
                                                     <input type="text" id="componentsC2" placeholder="Enter Value"
                                                            class="form-control " name="componentsC2"
                                                            value="{{ ((!empty($inspection_report->componentsC2)) ?$inspection_report->componentsC2 :old('componentsC2')) }}"/>
@@ -680,45 +638,19 @@
                                             <div class="col-xl-2">
                                                 <!--begin::Input-->
                                                 <div class="form-group">
-                                                    <label></label>
+                                                    <label>DIA</label>
                                                     <input type="text" id="componentsC3" placeholder="Enter Value"
                                                            class="form-control " name="componentsC3"
                                                            value="{{ ((!empty($inspection_report->componentsC3)) ?$inspection_report->componentsC3 :old('componentsC3')) }}"/>
                                                 </div>
                                             </div>
-                                            <div class="col-xl-2">
-                                                <!--begin::Input-->
-                                                <div class="form-group">
-                                                    <label></label>
-                                                    <input type="text" id="componentsC4" placeholder="Enter Value"
-                                                           class="form-control " name="componentsC4"
-                                                           value="{{ ((!empty($inspection_report->componentsC4)) ?$inspection_report->componentsC4 :old('componentsC4')) }}"/>
-                                                </div>
-                                            </div>
-                                            <div class="col-xl-2">
-                                                <!--begin::Input-->
-                                                <div class="form-group">
-                                                    <label></label>
-                                                    <input type="text" id="componentsC5" placeholder="Enter Value"
-                                                           class="form-control " name="componentsC5"
-                                                           value="{{ ((!empty($inspection_report->componentsC5)) ?$inspection_report->componentsC5 :old('componentsC5')) }}"/>
-                                                </div>
-                                            </div>
                                         </div>
                                         <div class="form-group row">
-                                            <div class="col-3 col-form-label">
-                                                <!--begin::Input-->
-                                                <div class="form-group">
-                                                    <label></label>
-                                                    <input type="text" id="componentsD1" placeholder="Enter Component"
-                                                           class="form-control " name="componentsD1"
-                                                           value="{{ ((!empty($inspection_report->componentsD1)) ?$inspection_report->componentsD1 :old('componentsD1')) }}"/>
-                                                </div>
-                                            </div>
+                                            <label class="col-3 col-form-label ">OIL PUMP</label>
                                             <div class="col-xl-2">
                                                 <!--begin::Input-->
                                                 <div class="form-group">
-                                                    <label></label>
+                                                    <label>VISUAL</label>
                                                     <input type="text" id="componentsD2" placeholder="Enter Value"
                                                            class="form-control " name="componentsD2"
                                                            value="{{ ((!empty($inspection_report->componentsD2)) ?$inspection_report->componentsD2 :old('componentsD2')) }}"/>
@@ -727,7 +659,7 @@
                                             <div class="col-xl-2">
                                                 <!--begin::Input-->
                                                 <div class="form-group">
-                                                    <label></label>
+                                                    <label>INTER DIA</label>
                                                     <input type="text" id="componentsD3" placeholder="Enter Value"
                                                            class="form-control " name="componentsD3"
                                                            value="{{ ((!empty($inspection_report->componentsD3)) ?$inspection_report->componentsD3 :old('componentsD3')) }}"/>
@@ -736,19 +668,70 @@
                                             <div class="col-xl-2">
                                                 <!--begin::Input-->
                                                 <div class="form-group">
-                                                    <label></label>
+                                                    <label>HARDNESS</label>
                                                     <input type="text" id="componentsD4" placeholder="Enter Value"
                                                            class="form-control " name="componentsD4"
                                                            value="{{ ((!empty($inspection_report->componentsD4)) ?$inspection_report->componentsD4 :old('componentsD4')) }}"/>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-3 col-form-label ">HOUSING (SMALL/BIG)</label>
                                             <div class="col-xl-2">
                                                 <!--begin::Input-->
                                                 <div class="form-group">
-                                                    <label></label>
-                                                    <input type="text" id="componentsD5" placeholder="Enter Value"
-                                                           class="form-control " name="componentsD5"
-                                                           value="{{ ((!empty($inspection_report->componentsD5)) ?$inspection_report->componentsD5 :old('componentsD5')) }}"/>
+                                                    <label>VISUAL</label>
+                                                    <input type="text" id="componentsE2" placeholder="Enter Value"
+                                                           class="form-control " name="componentsE2"
+                                                           value="{{ ((!empty($inspection_report->componentsE2)) ?$inspection_report->componentsE2 :old('componentsE2')) }}"/>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-2">
+                                                <!--begin::Input-->
+                                                <div class="form-group">
+                                                    <label>INTER DIA</label>
+                                                    <input type="text" id="componentsE3" placeholder="Enter Value"
+                                                           class="form-control " name="componentsE3"
+                                                           value="{{ ((!empty($inspection_report->componentsE3)) ?$inspection_report->componentsE3 :old('componentsE3')) }}"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-3 col-form-label ">PUMP CASING</label>
+                                            <div class="col-xl-2">
+                                                <!--begin::Input-->
+                                                <div class="form-group">
+                                                    <label>VISUAL</label>
+                                                    <input type="text" id="componentsF2" placeholder="Enter Value"
+                                                           class="form-control " name="componentsF2"
+                                                           value="{{ ((!empty($inspection_report->componentsF2)) ?$inspection_report->componentsF2 :old('componentsF2')) }}"/>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-2">
+                                                <!--begin::Input-->
+                                                <div class="form-group">
+                                                    <label>OUTER DIA</label>
+                                                    <input type="text" id="componentsF3" placeholder="Enter Value"
+                                                           class="form-control " name="componentsF3"
+                                                           value="{{ ((!empty($inspection_report->componentsF3)) ?$inspection_report->componentsF3 :old('componentsF3')) }}"/>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-2">
+                                                <!--begin::Input-->
+                                                <div class="form-group">
+                                                    <label>ROTTER DIA</label>
+                                                    <input type="text" id="componentsF4" placeholder="Enter Value"
+                                                           class="form-control " name="componentsF4"
+                                                           value="{{ ((!empty($inspection_report->componentsF4)) ?$inspection_report->componentsF4 :old('componentsF4')) }}"/>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-2">
+                                                <!--begin::Input-->
+                                                <div class="form-group">
+                                                    <label>IMPLER DIA</label>
+                                                    <input type="text" id="componentsF5" placeholder="Enter Value"
+                                                           class="form-control " name="componentsF5"
+                                                           value="{{ ((!empty($inspection_report->componentsF5)) ?$inspection_report->componentsF5 :old('componentsF5')) }}"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -805,7 +788,7 @@
                                     @endif
                                     {{--                                    @if($spareItem[0]->optional_status == 'Spare')--}}
                                     @foreach($spareItem as $key=>$value)
-                                        <input type="hidden" name="challan_optional_id[]" value="{{ $value->challan_optional_id }}">
+                                        {{--                                        <input type="hidden" name="challan_optional_id[]" value="{{ $value->challan_optional_id }}">--}}
                                         <div class="form-group row">
                                             <div class="col-xl-3">
                                                 <!--begin::Input-->
@@ -886,7 +869,7 @@
                                                     <option value="TRANSPORTATION FAULT">TRANSPORTATION FAULT
                                                     </option>
                                                 </select>
-                                                <?php if(!empty($inspection_report->fault)){ ?>
+                                                <?php if (!empty($inspection_report->fault)){ ?>
                                                 <script>document.getElementById("fault").value = '{{ $inspection_report->fault }}';</script>
                                                 <?php } ?>
                                             </div>
@@ -902,7 +885,8 @@
                                                     Save
                                                 </button>
                                                 <a href="{{ url('challan-product-create/'.$challan_id->challan_id) }}"
-                                                   class="btn btn-light-primary font-weight-bold"><i class="fas fa-arrow-left"></i>
+                                                   class="btn btn-light-primary font-weight-bold"><i
+                                                        class="fas fa-arrow-left"></i>
                                                     Back Challan
                                                 </a>
                                             @else
