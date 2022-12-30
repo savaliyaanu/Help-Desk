@@ -21,16 +21,19 @@ class DeliveryChallanOutProductController extends Controller
 
         $branch_id = Auth::user()->branch_id;
         $challan_product = DB::select("SELECT
-	challan_product_id,topland.product_master.product_name,serial_no
+	topland.product_master.product_name,
+	challan_item_master.serial_no,
+	challan_product_id
 FROM
-	multiple_complain_to_supplier
-LEFT JOIN delivery_challan_out ON delivery_challan_out.delivery_challan_out_id = multiple_complain_to_supplier.delivery_challan_out_id
-LEFT JOIN challan_item_master ON challan_item_master.challan_id = multiple_complain_to_supplier.challan_id
+	delivery_challan_out
+LEFT JOIN challan ON challan.challan_id = delivery_challan_out.challan_id
+LEFT JOIN challan_item_master ON challan_item_master.challan_id = challan.challan_id
 LEFT JOIN topland.product_master ON topland.product_master.product_id = challan_item_master.product_id
-WHERE delivery_challan_out.delivery_challan_out_id = $delivery_challan_out_id
-  AND challan_item_master.is_delivery_challan = 'N'
-  AND delivery_challan_out.branch_id = $branch_id");
-
+WHERE
+	delivery_challan_out.delivery_challan_out_id = $delivery_challan_out_id
+AND challan_item_master.is_delivery_challan = 'N' AND delivery_challan_out.branch_id = $branch_id");
+//echo "<pre>";
+//print_r($challan_product);exit;
 
         $list = DB::table('delivery_challan_out_product')
             ->select('topland.product_master.product_name', 'delivery_challan_out_product.delivery_challan_product_id', 'challan_item_master.serial_no', 'delivery_challan_out_product.qty')

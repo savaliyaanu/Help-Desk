@@ -512,7 +512,7 @@
                                                                                     Information</a>
                                                                             </div>
                                                                         </div>
-                                                                        {{--@if($action!='UPDATE')--}}
+                                                                        @if($action!='UPDATE')
                                                                             <div class="col-xl-6">
                                                                                 <div class="form-group">
                                                                                     <label>&nbsp;</label>
@@ -523,7 +523,7 @@
                                                                                         <i class="la la-trash-o"></i>Delete</a>
                                                                                 </div>
                                                                             </div>
-                                                                        {{--@endif--}}
+                                                                        @endif
                                                                     </div>
                                                                 </div>
                                                                 <?php $temp++;
@@ -724,7 +724,7 @@
                                                                             </div>
                                                                             <!--end::Input-->
                                                                         </div>
-                                                                        {{--@if($action!='UPDATE')--}}
+                                                                        @if($action!='UPDATE')
                                                                             <div class="col-xl-6">
                                                                                 <!--begin::Input-->
                                                                                 <div class="form-group">
@@ -737,7 +737,7 @@
                                                                                 </div>
                                                                                 <!--end::Input-->
                                                                             </div>
-                                                                        {{--@endif--}}
+                                                                        @endif
                                                                     </div>
                                                                 </div>
                                                                 <?php } ?>

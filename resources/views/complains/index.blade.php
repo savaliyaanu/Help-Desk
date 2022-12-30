@@ -10,7 +10,7 @@
                 </div>
                 @can('create', App\Complain::class)
                     <div class="d-flex align-items-center">
-                        <a href="{{route('complain-detail.create')}}"
+                        <a href="{{url('complain-detail/create')}}"
                            class="btn btn-fh btn-white btn-hover-primary font-weight-bold px-2 px-lg-5 mr-2">
                             <span class="svg-icon svg-icon-success svg-icon-lg">
                                 <svg xmlns="http://www.w3.org/2000/svg"

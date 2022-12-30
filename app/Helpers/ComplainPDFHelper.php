@@ -1983,14 +1983,19 @@ WHERE
         if ($order_list[0]->change_develiry_address == 'Y') {
 
             $client_address_data_change_delivery = DB::table('invoice')
-                ->select('invoice.billing_name as client_name','invoice.mobile', 'invoice.address1', 'invoice.pincode','invoice.address2', 'invoice.address3', 'topland.city_master.city_name', 'topland.district_master.district_name', 'topland.state_master.state_name', 'invoice.gst_no')
+                ->select('invoice.billing_name as client_name', 'invoice.address1', 'invoice.address2', 'invoice.address3', 'topland.city_master.city_name',
+                    'topland.district_master.district_name', 'topland.state_master.state_name', 'invoice.gst_no','invoice.pincode','invoice.phone','invoice.mobile','invoice.contact_person')
                 ->leftJoin('topland.city_master', 'topland.city_master.city_id', '=', 'invoice.city_id')
                 ->leftJoin('topland.district_master', 'topland.district_master.district_id', '=', 'city_master.district_id')
                 ->leftJoin('topland.state_master', 'topland.state_master.state_id', '=', 'district_master.state_id')
                 ->where('invoice.invoice_id', '=', $invoice_id)
-                ->get();
+                ->first();
+
             Fpdf::SetWidths(array(194));
-            Fpdf::Row(array('DELIVERY AT : ' . strtoupper($client_address_data_change_delivery[0]->client_name) . "\n" . 'ADDRESS : ' . strtoupper($client_address_data_change_delivery[0]->address1) . " " . strtoupper($client_address_data_change_delivery[0]->address2) . " " . strtoupper($client_address_data_change_delivery[0]->address3) . " " . 'CITY: ' . strtoupper($client_address_data_change_delivery[0]->city_name) . " " . 'DISTRICT: ' . strtoupper($client_address_data_change_delivery[0]->district_name) . " " . 'STATE: ' . strtoupper($client_address_data_change_delivery[0]->state_name . "\n" . 'GSTIN : ' . strtoupper($client_address_data_change_delivery[0]->gst_no). "\n" . 'Contact No : ' . strtoupper($client_address_data_change_delivery[0]->mobile). "\n" . 'PinCode : ' . strtoupper($client_address_data_change_delivery[0]->pincode))),
+
+            Fpdf::Row(array('DELIVERY AT : ' . strtoupper($client_address_data_change_delivery->client_name)
+                . "\n" . 'ADDRESS : ' . strtoupper($client_address_data_change_delivery->address1) . " " . strtoupper($client_address_data_change_delivery->address2) . " " . strtoupper($client_address_data_change_delivery->address3) . " " . 'CITY: ' . strtoupper($client_address_data_change_delivery->city_name) . " " . 'DISTRICT: ' . strtoupper($client_address_data_change_delivery->district_name) . " " . 'STATE: ' . strtoupper($client_address_data_change_delivery->state_name
+                    . "\n" .'cCONTACT PER : ' . strtoupper($client_address_data_change_delivery->contact_person). " " . 'GSTIN : ' . strtoupper($client_address_data_change_delivery->gst_no). " " . 'Pin Code : ' . strtoupper($client_address_data_change_delivery->pincode). " " . 'Mobile No : ' . strtoupper($client_address_data_change_delivery->phone).'/'. strtoupper($client_address_data_change_delivery->mobile))),
                 array('L'), '', array(''), true);
         }
 
@@ -2526,16 +2531,19 @@ WHERE
         if ($order_list[0]->change_develiry_address == 'Y') {
 
             $client_address_data_change_delivery = DB::table('invoice')
-                ->select('invoice.billing_name as client_name', 'invoice.address1', 'invoice.address2', 'invoice.address3', 'topland.city_master.city_name', 'topland.district_master.district_name', 'topland.state_master.state_name', 'invoice.gst_no')
-                ->select('invoice.billing_name as client_name', 'invoice.address1', 'invoice.address2', 'invoice.address3', 'topland.city_master.city_name', 'topland.district_master.district_name', 'topland.state_master.state_name', 'invoice.gst_no')
+                ->select('invoice.billing_name as client_name', 'invoice.address1', 'invoice.address2', 'invoice.contact_person','invoice.address3', 'topland.city_master.city_name',
+                    'topland.district_master.district_name', 'topland.state_master.state_name', 'invoice.gst_no','invoice.pincode','invoice.phone','invoice.mobile')
                 ->leftJoin('topland.city_master', 'topland.city_master.city_id', '=', 'invoice.city_id')
                 ->leftJoin('topland.district_master', 'topland.district_master.district_id', '=', 'city_master.district_id')
                 ->leftJoin('topland.state_master', 'topland.state_master.state_id', '=', 'district_master.state_id')
                 ->where('invoice.invoice_id', '=', $invoice_id)
-                ->get();
+                ->first();
+
             Fpdf::SetWidths(array(194));
 
-            Fpdf::Row(array('DELIVERY AT : ' . strtoupper($client_address_data_change_delivery[0]->client_name) . "\n" . 'ADDRESS : ' . strtoupper($client_address_data_change_delivery[0]->address1) . " " . strtoupper($client_address_data_change_delivery[0]->address2) . " " . strtoupper($client_address_data_change_delivery[0]->address3) . " " . 'CITY: ' . strtoupper($client_address_data_change_delivery[0]->city_name) . " " . 'DISTRICT: ' . strtoupper($client_address_data_change_delivery[0]->district_name) . " " . 'STATE: ' . strtoupper($client_address_data_change_delivery[0]->state_name . "\n" . 'GSTIN : ' . strtoupper($client_address_data_change_delivery[0]->gst_no))),
+            Fpdf::Row(array('DELIVERY AT : ' . strtoupper($client_address_data_change_delivery->client_name)
+                . "\n" . 'ADDRESS : ' . strtoupper($client_address_data_change_delivery->address1) . " " . strtoupper($client_address_data_change_delivery->address2) . " " . strtoupper($client_address_data_change_delivery->address3) . " " . 'CITY: ' . strtoupper($client_address_data_change_delivery->city_name) . " " . 'DISTRICT: ' . strtoupper($client_address_data_change_delivery->district_name) . " " . 'STATE: ' . strtoupper($client_address_data_change_delivery->state_name
+                    . "\n" . 'CONTACT PER : ' . strtoupper($client_address_data_change_delivery->contact_person). " " . 'GSTIN : ' . strtoupper($client_address_data_change_delivery->gst_no). " " . 'Pin Code : ' . strtoupper($client_address_data_change_delivery->pincode). " " . 'Mobile No : ' . strtoupper($client_address_data_change_delivery->phone).'/'. strtoupper($client_address_data_change_delivery->mobile))),
                 array('L'), '', array(''), true);
         }
 

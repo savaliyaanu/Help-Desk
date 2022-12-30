@@ -209,11 +209,16 @@ class InvoiceController extends Controller
      */
     public function edit(Request $request, $id)
     {
+       $branch_id=Auth::user()->branch_id;
         $challanList = DB::table('helpdesk.challan')
-            ->select('complain.complain_no', 'challan.challan_id', 'complain.client_name')
+            ->select('complain.complain_no', 'challan.challan_id', 'complain.client_name','challan.branch_id',\
+            DB::raw("(select CONCAT(RIGHT (YEAR(date_from), 2),'-',RIGHT (YEAR(date_to), 2))from financial_year as p WHERE p.financial_id = complain.financial_id) as fyear"))
             ->leftjoin('billty', 'billty.billty_id', 'challan.billty_id')
             ->leftjoin('complain', 'complain.complain_id', 'billty.complain_id')
-            ->where('challan.branch_id', '=', Auth::user()->branch_id)
+//            ->whereNOTIn('challan_id', function ($query) {
+//                $query->select('challan_id')->from('invoice');
+//            })
+            ->where('challan.branch_id', '=', $branch_id)
             ->get();
 
 
@@ -223,7 +228,7 @@ class InvoiceController extends Controller
         $invoiceList = DB::table('invoice')->where('invoice_id', '=', $id)->get();
         $request->session()->put('invoice_id', $id);
 
-        return view('invoice.create')->with('action', 'UPDATE')->with('pageType', $this->pageType)->with('invoiceDetail', $invoiceList[0])->with('challanList', $challanList)->with('transportList', $transportList)->with('cityList', $cityList);
+        return view('invoice.create')->with('action', 'UPDATE')->with(compact('branch_id'))->with('pageType', $this->pageType)->with('invoiceDetail', $invoiceList[0])->with('challanList', $challanList)->with('transportList', $transportList)->with('cityList', $cityList);
     }
 
     /**
